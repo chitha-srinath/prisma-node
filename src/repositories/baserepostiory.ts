@@ -42,22 +42,27 @@ export class BaseRepository<T> {
   }
 
   async create(data: Partial<T>): Promise<T> {
-    return this.getModel().create({ data }) as Promise<T>;
+    let result = await this.getModel().create({ data });
+    return result;
   }
 
   async findAll(): Promise<T[]> {
-    return this.getModel().findMany() as Promise<T[]>;
+    let result = await this.getModel().findMany();
+    return result;
   }
 
   async findById(id: number): Promise<T | null> {
-    return this.getModel().findUnique({ where: { id } }) as Promise<T | null>;
+    let result = this.getModel().findUnique({ where: { id } });
+    return result;
   }
 
   async update(id: number, data: Partial<T>): Promise<T> {
-    return this.getModel().update({ where: { id }, data }) as Promise<T>;
+    let result = this.getModel().update({ where: { id }, data });
+    return result;
   }
 
   async delete(id: number): Promise<T> {
-    return this.getModel().delete({ where: { id } }) as Promise<T>;
+    let result = this.getModel().delete({ where: { id } });
+    return result;
   }
 }

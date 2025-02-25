@@ -1,7 +1,7 @@
 import { App } from './app';
 import 'dotenv/config';
 
-const app = new App();
+const server = new App();
 const PORT = process.env.PORT || 3000;
 
-app.listen(Number(PORT));
+server.listen(Number(PORT));

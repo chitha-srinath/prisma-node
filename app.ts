@@ -17,6 +17,9 @@ export class App {
   }
 
   private initializeRoutes(): void {
+    this.app.get('/', (_, res) => {
+      res.send('Hello World!');
+    });
     this.app.use('/api', indexRoutes);
   }
   public listen(port: number): void {
