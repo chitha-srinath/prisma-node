@@ -1,7 +1,7 @@
 import { Post } from '@prisma/client';
 
-import { PostRepository } from '../repositories/post.repostiory';
-import { CreatePostData, UpdatePostData } from '../interface/post';
+import { PostRepository } from '../Repositories/post.repostiory';
+import { CreatePostData, UpdatePostData } from '../Dtos/post.dto';
 
 export class PostService {
   private postRepository: PostRepository;

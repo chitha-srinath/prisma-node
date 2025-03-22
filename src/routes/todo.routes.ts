@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { TodoController } from '../controller/todo.contoller';
+import { TodoController } from '../Controllers/todo.contoller';
 
 export class TodoRoutes {
   private router: Router;

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { TodoService } from '../services/todo.service';
+import { TodoService } from '../Services/todo.service';
 
 export class TodoController {
   private todoService: TodoService;
