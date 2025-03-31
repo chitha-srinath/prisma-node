@@ -2,9 +2,11 @@ import { NextFunction, Request, Response } from 'express';
 import { PostService } from '../Services/post.service';
 import { ZodError } from 'zod';
 import { createPostDto } from '../Dtos/post.dto';
-import { NotFoundError, PayloadError } from '../Utilities/Errors';
+import { DatabaseError, NotFoundError, PayloadError } from '../Utilities/ErrorUtility';
 import { ResponseHandler } from '../Middlewares/ResponseHandler';
 import { ErrorMsgEnum } from '../Interfaces/Error.enums';
+import { Prisma } from '@prisma/client';
+import { PrismaErrorHandler } from '../Utilities/databaseErrors';
 
 export class PostController {
   private postService: PostService;
@@ -18,8 +20,12 @@ export class PostController {
       const parsedData = createPostDto.parse(req.body);
       const post = await this.postService.createpost(parsedData);
 
-      ResponseHandler.sucessResponse(res, post, undefined, 201);
+      ResponseHandler.sucessResponse(res, post, 'User Created successfully', 201); // keep response message in enum or db
+      // res.sendStatus(201);
     } catch (error) {
+      if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
+        return next(PrismaErrorHandler.handlePrismaError(error));
+      }
       if (error instanceof ZodError) {
         next(new PayloadError(error?.errors?.[0]?.message));
       }
@@ -59,6 +65,9 @@ export class PostController {
       const post = await this.postService.updatepost(Number(id), data);
       ResponseHandler.sucessResponse(res, post);
     } catch (error) {
+      if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
+        return next(PrismaErrorHandler.handlePrismaError(error));
+      }
       next(error);
     }
   }
@@ -67,7 +76,8 @@ export class PostController {
     try {
       const id = req.params.id;
       await this.postService.deletepost(Number(id));
-      ResponseHandler.sucessResponse(res, undefined, undefined, 204);
+      //ResponseHandler.sucessResponse(res, undefined, undefined, 204);
+      res.sendStatus(204);
     } catch (error) {
       next(error);
     }

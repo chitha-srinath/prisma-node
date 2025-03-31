@@ -33,3 +33,9 @@ export class BadRequestError extends AppError {
     super(ErrorTypeEnum.BAD_REQUEST, message, 400);
   }
 }
+
+export class DatabaseError extends AppError {
+  constructor(message: string) {
+    super(ErrorTypeEnum.DATABASE, message, 500);
+  }
+}

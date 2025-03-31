@@ -2,7 +2,7 @@ import express, { Express, NextFunction, Response } from 'express';
 import cors from 'cors';
 import indexRoutes from './src/Routes/index.routes';
 import { GlobalErrorHandler } from './src/Middlewares/GlobalErrorHandler';
-import { BadRequestError } from './src/Utilities/Errors';
+import { BadRequestError } from './src/Utilities/ErrorUtility';
 import { ErrorMsgEnum } from './src/Interfaces/Error.enums';
 import helmet from 'helmet';
 

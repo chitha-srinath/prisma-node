@@ -9,4 +9,5 @@ export enum ErrorTypeEnum {
   PAYLOAD = 'PAYLOAD',
   NOT_FOUND = 'NOT_FOUND',
   BAD_REQUEST = 'BAD_REQUEST',
+  DATABASE = 'DATABASE',
 }

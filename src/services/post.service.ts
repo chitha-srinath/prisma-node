@@ -1,17 +1,22 @@
-import { Post } from '@prisma/client';
+import { Post, PrismaClient } from '@prisma/client';
 
 import { PostRepository } from '../Repositories/post.repostiory';
 import { CreatePostData, UpdatePostData } from '../Dtos/post.dto';
+import { LoggerUtility } from '../Utilities/LoggerUtility';
 
 export class PostService {
   private postRepository: PostRepository;
+  private logger: LoggerUtility;
+  private prisma: PrismaClient = new PrismaClient();
 
   constructor() {
     this.postRepository = new PostRepository();
+    this.logger = new LoggerUtility(this.prisma);
   }
 
   async createpost(data: CreatePostData): Promise<Post> {
     let result = await this.postRepository.create(data);
+    this.logger.info('user post created');
     return result;
   }
 
