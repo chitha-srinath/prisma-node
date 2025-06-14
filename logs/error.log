@@ -1,0 +1,29 @@
+2025-03-31T11:42:46.212Z [ERROR]: Code: P2003 - 
+Invalid `this.getModel().create()` invocation in
+C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Repositories\baserepostiory.ts:45:40
+
+  42 }
+  43 
+  44 async create(data: Partial<T>): Promise<T> {
+→ 45   let result = await this.getModel().create(
+Foreign key constraint violated: `Post_userId_fkey (index)`
+2025-03-31T11:55:59.128Z [ERROR]: Code: P2003 - 
+Invalid `this.getModel().create()` invocation in
+C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Repositories\baserepostiory.ts:45:40
+
+  42 }
+  43 
+  44 async create(data: Partial<T>): Promise<T> {
+→ 45   let result = await this.getModel().create(
+Foreign key constraint violated: `Post_userId_fkey (index)`
+2025-03-31T11:58:11.842Z [ERROR]: Code: P2003 - 
+Invalid `this.getModel().create()` invocation in
+C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Repositories\baserepostiory.ts:45:40
+
+  42 }
+  43 
+  44 async create(data: Partial<T>): Promise<T> {
+→ 45   let result = await this.getModel().create(
+Foreign key constraint violated: `Post_userId_fkey (index)`
+2025-03-31T12:00:05.429Z [ERROR]: Request Not Found
+2025-03-31T12:06:53.016Z [ERROR]: post not found

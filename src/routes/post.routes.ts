@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { PostController } from '../controller/post.contoller';
+import { PostController } from '../Controllers/post.contoller';
 
 export class PostRoutes {
   private router: Router;

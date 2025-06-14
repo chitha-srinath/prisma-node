@@ -15,10 +15,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^6.4.1",
+    "@prisma/client": "^6.5.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "helmet": "^8.1.0",
+    "winston": "^3.17.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
@@ -32,7 +34,7 @@
     "eslint-plugin-prettier": "^5.2.3",
     "nodemon": "^3.1.9",
     "prettier": "^3.5.2",
-    "prisma": "^6.4.1",
+    "prisma": "^6.5.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   }
