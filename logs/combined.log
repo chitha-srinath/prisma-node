@@ -32,3 +32,44 @@ Foreign key constraint violated: `Post_userId_fkey (index)`
 2025-03-31T12:06:53.016Z [ERROR]: post not found
 2025-03-31T12:07:26.938Z [INFO]: user post created
 2025-03-31T12:09:27.331Z [INFO]: user post created
+2025-06-14T10:11:01.400Z [ERROR]: Required
+2025-06-14T12:15:10.920Z [ERROR]: Code: P2003 - 
+Invalid `this.getModel().create()` invocation in
+C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\repositories\baserepostiory.ts:45:40
+
+  42 }
+  43 
+  44 async create(data: Partial<T>): Promise<T> {
+→ 45   let result = await this.getModel().create(
+Foreign key constraint violated on the constraint: `Post_userId_fkey`
+2025-06-14T12:16:45.046Z [ERROR]: Foreign key constraint violation: 
+Invalid `this.getModel().create()` invocation in
+C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\repositories\baserepostiory.ts:45:40
+
+  42 }
+  43 
+  44 async create(data: Partial<T>): Promise<T> {
+→ 45   let result = await this.getModel().create(
+Foreign key constraint violated on the constraint: `Post_userId_fkey`
+2025-06-14T12:17:27.847Z [ERROR]: Code: P2003 - 
+Invalid `this.getModel().create()` invocation in
+C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\repositories\baserepostiory.ts:45:40
+
+  42 }
+  43 
+  44 async create(data: Partial<T>): Promise<T> {
+→ 45   let result = await this.getModel().create(
+Foreign key constraint violated on the constraint: `Post_userId_fkey`
+2025-06-14T12:17:47.560Z [ERROR]: Code: P2003 - 
+Invalid `this.getModel().create()` invocation in
+C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\repositories\baserepostiory.ts:45:40
+
+  42 }
+  43 
+  44 async create(data: Partial<T>): Promise<T> {
+→ 45   let result = await this.getModel().create(
+Foreign key constraint violated on the constraint: `Post_userId_fkey`
+2025-06-14T12:18:25.830Z [ERROR]: Expected string, received number
+2025-06-14T12:19:46.504Z [ERROR]: Expected string, received number for /
+2025-06-14T12:20:20.642Z [ERROR]: Expected string, received number for title
+2025-06-14T12:23:16.739Z [ERROR]: Expected string, received number for title

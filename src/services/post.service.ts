@@ -11,7 +11,7 @@ export class PostService {
   }
 
   async createpost(data: CreatePostData): Promise<Post> {
-    let result = await this.postRepository.create(data);
+    let result = await this.postRepository.insert(data);
     return result;
   }
 

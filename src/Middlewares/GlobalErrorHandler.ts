@@ -6,7 +6,7 @@ import { prismaConnection } from '../utils/database';
 
 export class GlobalErrorHandler {
   private static prisma: PrismaClient = prismaConnection;
-  public static logger: LoggerUtility = new LoggerUtility(GlobalErrorHandler.prisma);
+  public static logger: LoggerUtility = LoggerUtility.getInstance(GlobalErrorHandler.prisma);
 
   static handleErrors(
     err: Error & { status?: number },

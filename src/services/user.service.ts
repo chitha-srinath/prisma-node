@@ -11,7 +11,7 @@ export class UserService {
   }
 
   async createuser(data: CreateUserData): Promise<user> {
-    return this.userRepository.create(data);
+    return this.userRepository.insert(data);
   }
 
   async getAllusers(): Promise<user[]> {

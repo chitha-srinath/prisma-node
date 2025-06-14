@@ -17,18 +17,60 @@ export class BaseRepository<T> {
     this.getModel = () => modelSelector(this.prisma);
   }
 
-  async create(data: Partial<T>): Promise<T> {
+  async insert(data: Partial<T>): Promise<T> {
     let result = await this.getModel().create({ data });
     return result;
   }
 
-  async findAll(): Promise<T[]> {
-    let result = await this.getModel().findMany();
+  async insertMany(data: Partial<T>, duplicate: boolean = true): Promise<T> {
+    let result = await this.getModel().createMany({ data, skipDuplicates: duplicate });
     return result;
   }
 
-  async findById(id: number): Promise<T | null> {
-    let result = this.getModel().findUnique({ where: { id } });
+  async upsert(data: Partial<T>, update: Partial<T>) {
+    const result = await this.getModel().upsert({
+      where: data,
+      update: update,
+      create: {
+        ...data,
+        ...update,
+      },
+    });
+    return result;
+  }
+
+  async findAll(
+    data?: Partial<T>,
+    select?: Record<string, boolean>,
+    include?: Record<string, boolean>,
+    sort?: {
+      field: keyof T;
+      order: 'asc' | 'desc';
+    },
+  ): Promise<T[]> {
+    let result = await this.getModel().findMany({
+      where: data,
+      ...(sort && {
+        orderBy: {
+          [sort.field]: sort.order,
+        },
+      }),
+      ...(select && { select }),
+      ...(include && { include }),
+    });
+    return result;
+  }
+
+  async findById(
+    id: number,
+    select?: Record<string, boolean>,
+    include?: Record<string, boolean>,
+  ): Promise<T | null> {
+    let result = this.getModel().findUnique({
+      where: { id },
+      ...(select && { select }),
+      ...(include && { include }),
+    });
     return result;
   }
 
@@ -39,6 +81,43 @@ export class BaseRepository<T> {
 
   async delete(id: number): Promise<T> {
     let result = this.getModel().delete({ where: { id } });
+    return result;
+  }
+
+  async getPaginatedResult(
+    data: Partial<T>,
+    skip = 0,
+    limit = 10,
+    select?: Record<string, boolean>,
+    include?: Record<string, boolean>,
+    sort?: {
+      field: keyof T;
+      order: 'asc' | 'desc';
+    },
+  ): Promise<{ data: T[]; total: number }> {
+    const result = this.getModel().findMany({
+      where: data,
+      ...(sort && {
+        orderBy: {
+          [sort.field]: sort.order,
+        },
+      }),
+      skip,
+      take: limit,
+      ...(select && { select }),
+      ...(include && { include }),
+    });
+
+    return result;
+  }
+
+  async groupData(groupByQuery: any) {
+    const result = this.getModel().groupBy(groupByQuery);
+    return result;
+  }
+
+  async aggaregatedData(Query: any) {
+    const result = this.getModel().aggaregate(Query);
     return result;
   }
 }

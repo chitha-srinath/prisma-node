@@ -11,7 +11,7 @@ export class TodoService {
   }
 
   async createTodo(data: CreateTodoData): Promise<Todo> {
-    return this.todoRepository.create(data);
+    return this.todoRepository.insert(data);
   }
 
   async getAllTodos(): Promise<Todo[]> {

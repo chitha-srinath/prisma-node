@@ -26,9 +26,10 @@ class PrismaTransport extends Transport {
 }
 
 export class LoggerUtility {
+  private static instance: LoggerUtility;
   private logger: winston.Logger;
 
-  constructor(prisma: PrismaClient) {
+  private constructor(prisma: PrismaClient) {
     this.logger = winston.createLogger({
       level: 'info',
       format: format.combine(
@@ -47,6 +48,13 @@ export class LoggerUtility {
         new PrismaTransport(prisma),
       ],
     });
+  }
+
+  public static getInstance(prisma: PrismaClient): LoggerUtility {
+    if (!LoggerUtility.instance) {
+      LoggerUtility.instance = new LoggerUtility(prisma);
+    }
+    return LoggerUtility.instance;
   }
 
   info(message: string) {
