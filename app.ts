@@ -1,10 +1,11 @@
 import express, { Express, NextFunction, Response } from 'express';
 import cors from 'cors';
-import indexRoutes from './src/Routes/index.routes';
-import { GlobalErrorHandler } from './src/Middlewares/GlobalErrorHandler';
+
+import { GlobalErrorHandler } from './src/middlewares/GlobalErrorHandler';
 import { BadRequestError } from './src/Utilities/ErrorUtility';
-import { ErrorMsgEnum } from './src/Interfaces/Error.enums';
+import { ErrorMsgEnum } from './src/Enums/Error.enums';
 import helmet from 'helmet';
+import indexRoutes from './src/routes/index.routes';
 
 export class App {
   private app: Express;

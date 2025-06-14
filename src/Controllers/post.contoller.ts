@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
-import { PostService } from '../Services/post.service';
+
 import { ZodError } from 'zod';
 import { createPostDto } from '../Dtos/post.dto';
 import { DatabaseError, NotFoundError, PayloadError } from '../Utilities/ErrorUtility';
-import { ResponseHandler } from '../Middlewares/ResponseHandler';
+import { ResponseHandler } from '../middlewares/ResponseHandler';
 import { ErrorMsgEnum } from '../Enums/Error.enums';
 import { Prisma } from '@prisma/client';
 import { PrismaErrorHandler } from '../Utilities/databaseErrors';
+import { PostService } from '../services/post.service';
 
 export class PostController {
   private postService: PostService;

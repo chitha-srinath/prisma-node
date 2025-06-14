@@ -1,30 +1,4 @@
-<<<<<<< HEAD
-import { Router } from 'express';
-import { TodoController } from '../controller/todo.contoller';
 
-export class TodoRoutes {
-  private router: Router;
-  private todoController: TodoController;
-
-  constructor() {
-    this.router = Router();
-    this.todoController = new TodoController();
-    this.initializeRoutes();
-  }
-
-  private initializeRoutes(): void {
-    this.router.post('/', this.todoController.createTodo.bind(this.todoController));
-    this.router.get('/', this.todoController.getAllTodos.bind(this.todoController));
-    this.router.get('/:id', this.todoController.getTodoById.bind(this.todoController));
-    this.router.put('/:id', this.todoController.updateTodo.bind(this.todoController));
-    this.router.delete('/:id', this.todoController.deleteTodo.bind(this.todoController));
-  }
-
-  public getRouter(): Router {
-    return this.router;
-  }
-}
-=======
 import { Router } from 'express';
 import { TodoController } from '../Controllers/todo.contoller';
 
@@ -50,4 +24,3 @@ export class TodoRoutes {
     return this.router;
   }
 }
->>>>>>> 0608f1f444a5d2798500523d96595927371ae41e
