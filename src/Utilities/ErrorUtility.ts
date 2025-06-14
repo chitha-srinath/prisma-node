@@ -1,4 +1,4 @@
-import { ErrorTypeEnum } from '../Interfaces/Error.enums';
+import { ErrorTypeEnum } from '../Enums/Error.enums';
 
 abstract class AppError extends Error {
   status: number;

@@ -4,7 +4,7 @@ import { ZodError } from 'zod';
 import { createPostDto } from '../Dtos/post.dto';
 import { DatabaseError, NotFoundError, PayloadError } from '../Utilities/ErrorUtility';
 import { ResponseHandler } from '../Middlewares/ResponseHandler';
-import { ErrorMsgEnum } from '../Interfaces/Error.enums';
+import { ErrorMsgEnum } from '../Enums/Error.enums';
 import { Prisma } from '@prisma/client';
 import { PrismaErrorHandler } from '../Utilities/databaseErrors';
 
