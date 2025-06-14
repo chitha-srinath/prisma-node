@@ -1,7 +1,7 @@
 import { Todo } from '@prisma/client';
-import { CreateTodoData, UpdateTodoData } from '../interface/todo';
+import { CreateTodoData, UpdateTodoData } from '../Dtos/todo.dto';
 // import { BaseRepository } from '../repositories/baserepostiory';
-import { TodoRepository } from '../repositories/Todo.repostiory';
+import { TodoRepository } from '../Repositories/Todo.repostiory';
 
 export class TodoService {
   private todoRepository: TodoRepository;

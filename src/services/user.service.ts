@@ -1,7 +1,7 @@
 import { user } from '@prisma/client';
 
-import { UserRepository } from '../repositories/user.repostiory';
-import { CreateUserData, UpdateUserData } from '../interface/user';
+import { UserRepository } from '../Repositories/user.repostiory';
+import { CreateUserData, UpdateUserData } from '../Dtos/user.dto';
 
 export class UserService {
   private userRepository: UserRepository;

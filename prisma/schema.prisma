@@ -39,3 +39,11 @@ model user {
   isActive  Boolean  @default(false)
   Post      Post[]
 }
+
+model Log {
+  id        String    @id @default(uuid())
+  level     String
+  message   String
+  timestamp DateTime  @default(now())
+}
+
