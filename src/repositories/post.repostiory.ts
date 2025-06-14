@@ -1,4 +1,4 @@
-import { Post } from '@prisma/client';
+import { Post, Prisma } from '@prisma/client';
 import { BaseRepository } from './baserepostiory';
 
 export class PostRepository extends BaseRepository<Post> {

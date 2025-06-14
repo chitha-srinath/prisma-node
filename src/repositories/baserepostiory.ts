@@ -1,43 +1,19 @@
-// import { PrismaClient, Prisma, Todo } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
+import { prismaConnection } from '../utils/database';
 
-// export class BaseRepository<T extends { id: number }> {
-//   protected prisma: PrismaClient;
-//   protected getModel: () => any; // Function that returns the appropriate model client
-
-//   constructor(modelSelector: (prisma: PrismaClient) => any) {
-//     this.prisma = new PrismaClient();
-//     this.getModel = () => modelSelector(this.prisma);
-//   }
-
-//   async create(data: T): Promise<T> {
-//     return this.getModel().create({ data }) as Promise<T>;
-//   }
-
-//   async findAll(): Promise<T[]> {
-//     return this.getModel().findMany() as Promise<T[]>;
-//   }
-
-//   async findById(id: number): Promise<T | null> {
-//     return this.getModel().findUnique({ where: { id } }) as Promise<T | null>;
-//   }
-
-//   async update(id: number, data: Partial<T>): Promise<T> {
-//     return this.getModel().update({ where: { id }, data }) as Promise<T>;
-//   }
-
-//   async delete(id: number): Promise<T> {
-//     return this.getModel().delete({ where: { id } }) as Promise<T>;
-//   }
-// }
-
-import { PrismaClient, Prisma } from '@prisma/client';
+type ModelDelegate<T> = {
+  create: (args: { data: Partial<T> }) => Promise<T>;
+  findMany: (args?: any) => Promise<T[]>;
+  findUnique: (args: any) => Promise<T | null>;
+  update: (args: { where: any; data: Partial<T> }) => Promise<T>;
+  delete: (args: { where: any }) => Promise<T>;
+};
 
 export class BaseRepository<T> {
   protected prisma: PrismaClient;
   protected getModel: () => any;
-
   constructor(modelSelector: (prisma: PrismaClient) => any) {
-    this.prisma = new PrismaClient();
+    this.prisma = prismaConnection;
     this.getModel = () => modelSelector(this.prisma);
   }
 

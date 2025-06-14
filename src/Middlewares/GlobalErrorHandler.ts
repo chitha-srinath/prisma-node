@@ -2,9 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { ResponseHandler } from '../middlewares/ResponseHandler';
 import { PrismaClient } from '@prisma/client';
 import { LoggerUtility } from '../Utilities/LoggerUtility';
+import { prismaConnection } from '../utils/database';
 
 export class GlobalErrorHandler {
-  private static prisma: PrismaClient = new PrismaClient();
+  private static prisma: PrismaClient = prismaConnection;
   public static logger: LoggerUtility = new LoggerUtility(GlobalErrorHandler.prisma);
 
   static handleErrors(

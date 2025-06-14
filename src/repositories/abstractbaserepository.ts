@@ -16,7 +16,6 @@
 // export abstract class BaseRepository<T extends Document> {
 //   constructor(@InjectModel('') private readonly model: Model<T>) {}
 
-
 import {
   Model,
   Document,
@@ -120,9 +119,7 @@ export abstract class BaseRepository<T extends Document> {
     update: UpdateQuery<T>,
     options?: QueryOptions<T>,
   ): Promise<T | null> {
-    return this.model
-      .findByIdAndUpdate(id, update, { new: true, ...options })
-      .exec();
+    return this.model.findByIdAndUpdate(id, update, { new: true, ...options }).exec();
   }
 
   /**
@@ -137,9 +134,7 @@ export abstract class BaseRepository<T extends Document> {
     update: UpdateQuery<T>,
     options?: QueryOptions<T>,
   ): Promise<T | null> {
-    return this.model
-      .findOneAndUpdate(filter, update, { new: true, ...options })
-      .exec();
+    return this.model.findOneAndUpdate(filter, update, { new: true, ...options }).exec();
   }
 
   /**
@@ -148,10 +143,7 @@ export abstract class BaseRepository<T extends Document> {
    * @param options - Additional query options.
    * @returns The deleted document or null if not found.
    */
-  async findByIdAndDelete(
-    id: string,
-    options?: QueryOptions<T>,
-  ): Promise<T | null> {
+  async findByIdAndDelete(id: string, options?: QueryOptions<T>): Promise<T | null> {
     return this.model.findByIdAndDelete(id, options).exec();
   }
 
@@ -161,10 +153,7 @@ export abstract class BaseRepository<T extends Document> {
    * @param options - Additional query options.
    * @returns The deleted document or null if not found.
    */
-  async deleteOne(
-    filter: FilterQuery<T>,
-    options?: QueryOptions<T>,
-  ): Promise<T | null> {
+  async deleteOne(filter: FilterQuery<T>, options?: QueryOptions<T>): Promise<T | null> {
     return this.model.findOneAndDelete(filter, options).exec();
   }
 
@@ -195,10 +184,7 @@ export abstract class BaseRepository<T extends Document> {
    * @param paths - Fields to populate.
    * @returns The populated document(s).
    */
-  async populate(
-    docs: T | T[],
-    paths: PopulateOptions | PopulateOptions[],
-  ): Promise<T | T[]> {
+  async populate(docs: T | T[], paths: PopulateOptions | PopulateOptions[]): Promise<T | T[]> {
     return this.model.populate(docs, paths);
   }
 }

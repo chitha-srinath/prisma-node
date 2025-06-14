@@ -1,14 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-
-import { ZodError } from 'zod';
-import { createPostDto } from '../Dtos/post.dto';
 import { DatabaseError, NotFoundError, PayloadError } from '../Utilities/ErrorUtility';
 import { ResponseHandler } from '../middlewares/ResponseHandler';
-import { ErrorMsgEnum } from '../Enums/Error.enums';
-import { Prisma } from '@prisma/client';
 import { PrismaErrorHandler } from '../Utilities/databaseErrors';
 import { PostService } from '../services/post.service';
-
+import { SuccessMessages } from '../constants/success-messages.constants';
+import { ErrorMessages } from '../constants/error-messages.constatnts';
 export class PostController {
   private postService: PostService;
 
@@ -18,17 +14,11 @@ export class PostController {
 
   async createpost(req: Request, res: Response, next: NextFunction) {
     try {
-      const parsedData = createPostDto.parse(req.body);
-      const post = await this.postService.createpost(parsedData);
-
-      ResponseHandler.sucessResponse(res, post, 'User Created successfully', 201); // keep response message in enum or db
-      // res.sendStatus(201);
+      const post = await this.postService.createpost(req.body);
+      ResponseHandler.sucessResponse(res, post, SuccessMessages.POST.CREATED, 201); // keep response message in enum or db
     } catch (error) {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
         return next(PrismaErrorHandler.handlePrismaError(error));
-      }
-      if (error instanceof ZodError) {
-        next(new PayloadError(error?.errors?.[0]?.message));
       }
       next(error);
     }
@@ -50,7 +40,7 @@ export class PostController {
       if (!post) {
         //throw new Error();
         // throw new Error('Not Found');
-        next(new NotFoundError(ErrorMsgEnum.POST_NOT_FOUND));
+        next(new NotFoundError(ErrorMessages.POST.POST_NOT_FOUND));
         return;
       }
       ResponseHandler.sucessResponse(res, post);
