@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { prismaConnection } from './database';
+import { randomUUID } from 'crypto';
 
 export const auth = betterAuth({
   database: prismaAdapter(prismaConnection, {
@@ -15,7 +16,7 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 24, // 24 hours
   },
   advanced: {
-    generateId: () => crypto.randomUUID(),
+    generateId: () => randomUUID(),
   },
   plugins: [],
 });

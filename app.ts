@@ -6,7 +6,8 @@ import { ErrorMsgEnum } from './src/Enums/Error.enums';
 import helmet from 'helmet';
 import indexRoutes from './src/routes/index.routes';
 import limiter from './src/utils/rate-limit';
-
+import { toNodeHandler } from 'better-auth/node';
+import { auth } from './src/utils/auth_config';
 export class App {
   public readonly app: Express;
 
@@ -26,6 +27,7 @@ export class App {
         credentials: true,
       }),
     );
+    this.app.all('/api/auth/*splat', toNodeHandler(auth));
     this.app.use(express.json());
     this.app.disable('x-powered-by');
     this.app.use(helmet());
