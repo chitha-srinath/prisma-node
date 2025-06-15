@@ -1,7 +1,16 @@
+import { createServer } from 'http';
 import { App } from './app';
-import 'dotenv/config';
+import { config } from './src/config/config';
+import { SocketServer } from './socket-server';
 
-const server = new App();
-const PORT = process.env.PORT || 3000;
+const expressServer = new App().app;
 
-server.listen(Number(PORT));
+const httpServer = createServer(expressServer);
+
+new SocketServer(httpServer);
+
+httpServer.listen(config.port, () => {
+  console.log(`Server running on port ${config.port}`);
+});
+
+export default httpServer;

@@ -1,14 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { prismaConnection } from '../utils/database';
 
-type ModelDelegate<T> = {
-  create: (args: { data: Partial<T> }) => Promise<T>;
-  findMany: (args?: any) => Promise<T[]>;
-  findUnique: (args: any) => Promise<T | null>;
-  update: (args: { where: any; data: Partial<T> }) => Promise<T>;
-  delete: (args: { where: any }) => Promise<T>;
-};
-
 export class BaseRepository<T> {
   protected prisma: PrismaClient;
   protected getModel: () => any;
@@ -18,16 +10,16 @@ export class BaseRepository<T> {
   }
 
   async insert(data: Partial<T>): Promise<T> {
-    let result = await this.getModel().create({ data });
+    const result = await this.getModel().create({ data });
     return result;
   }
 
-  async insertMany(data: Partial<T>, duplicate: boolean = true): Promise<T> {
-    let result = await this.getModel().createMany({ data, skipDuplicates: duplicate });
+  async insertMany(data: Partial<T>, duplicate = true): Promise<{ count: number }> {
+    const result = await this.getModel().createMany({ data, skipDuplicates: duplicate });
     return result;
   }
 
-  async upsert(data: Partial<T>, update: Partial<T>) {
+  async upsert(data: Partial<T>, update: Partial<T>): Promise<T> {
     const result = await this.getModel().upsert({
       where: data,
       update: update,
@@ -48,7 +40,7 @@ export class BaseRepository<T> {
       order: 'asc' | 'desc';
     },
   ): Promise<T[]> {
-    let result = await this.getModel().findMany({
+    const result = await this.getModel().findMany({
       where: data,
       ...(sort && {
         orderBy: {
@@ -66,7 +58,7 @@ export class BaseRepository<T> {
     select?: Record<string, boolean>,
     include?: Record<string, boolean>,
   ): Promise<T | null> {
-    let result = this.getModel().findUnique({
+    const result = this.getModel().findUnique({
       where: { id },
       ...(select && { select }),
       ...(include && { include }),
@@ -75,12 +67,12 @@ export class BaseRepository<T> {
   }
 
   async update(id: number, data: Partial<T>): Promise<T> {
-    let result = this.getModel().update({ where: { id }, data });
+    const result = this.getModel().update({ where: { id }, data });
     return result;
   }
 
   async delete(id: number): Promise<T> {
-    let result = this.getModel().delete({ where: { id } });
+    const result = this.getModel().delete({ where: { id } });
     return result;
   }
 
@@ -94,7 +86,7 @@ export class BaseRepository<T> {
       field: keyof T;
       order: 'asc' | 'desc';
     },
-  ): Promise<{ data: T[]; total: number }> {
+  ): Promise<T[]> {
     const result = this.getModel().findMany({
       where: data,
       ...(sort && {
@@ -111,13 +103,24 @@ export class BaseRepository<T> {
     return result;
   }
 
-  async groupData(groupByQuery: any) {
-    const result = this.getModel().groupBy(groupByQuery);
+  async groupData(groupByQuery: {
+    by: string[];
+    _count?: boolean;
+    _sum?: boolean;
+    _avg?: boolean;
+  }): Promise<any[]> {
+    const result = await this.getModel().groupBy(groupByQuery);
     return result;
   }
 
-  async aggaregatedData(Query: any) {
-    const result = this.getModel().aggaregate(Query);
+  async aggaregatedData(query: {
+    _count?: boolean;
+    _sum?: boolean;
+    _avg?: boolean;
+    _min?: boolean;
+    _max?: boolean;
+  }): Promise<any> {
+    const result = await this.getModel().aggregate(query);
     return result;
   }
 }

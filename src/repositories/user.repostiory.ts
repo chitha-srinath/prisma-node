@@ -3,9 +3,8 @@
 
 // export class TodoRepository extends BaseRepository<Todo>{}
 
-import {  user } from '@prisma/client';
+import { user } from '@prisma/client';
 import { BaseRepository } from './baserepostiory';
-
 
 // Todo repository implementation
 export class UserRepository extends BaseRepository<user> {

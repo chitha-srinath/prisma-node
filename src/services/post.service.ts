@@ -11,18 +11,18 @@ export class PostService {
   }
 
   async createpost(data: CreatePostData): Promise<Post> {
-    let result = await this.postRepository.insert(data);
+    const result = await this.postRepository.insert(data);
     return result;
   }
 
   async getAllposts(): Promise<Post[]> {
     // let result = await this.postRepository.findbyQuery({userId : 10});
-    let result = await this.postRepository.findAll();
+    const result = await this.postRepository.findAll();
     return result;
   }
 
   async getpostById(id: number): Promise<Post | null> {
-    let result = await this.postRepository.findById(id);
+    const result = await this.postRepository.findById(id);
     return result;
   }
 
@@ -32,7 +32,7 @@ export class PostService {
       throw new Error('post not found');
     }
 
-    let result = await this.postRepository.update(id, data);
+    const result = await this.postRepository.update(id, data);
     return result;
   }
 
@@ -42,7 +42,7 @@ export class PostService {
       throw new Error('post not found');
     }
 
-    let result = await this.postRepository.delete(id);
+    const result = await this.postRepository.delete(id);
     return result;
   }
 }
