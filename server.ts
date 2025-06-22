@@ -10,7 +10,7 @@ const httpServer = createServer(expressServer);
 new SocketServer(httpServer);
 
 httpServer.listen(config.port, () => {
-  console.log(`Server running on port ${config.port}`);
+  console.log(`Server running on port http://localhost:${config.port}`);
 });
 
 export default httpServer;

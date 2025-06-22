@@ -9,7 +9,10 @@ type ValidationType = 'body' | 'query' | 'params';
  * @param schema - Zod schema for validation
  * @returns Express middleware function
  */
-export function validatePayload<T>(schema: ZodSchema<T>, type: ValidationType = 'body') {
+export function validatePayload<T>(
+  schema: ZodSchema<T>,
+  type: ValidationType = 'body',
+): (req: Request, res: Response, next: NextFunction) => void {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse(req[type]);

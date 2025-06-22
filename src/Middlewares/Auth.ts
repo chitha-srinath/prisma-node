@@ -1,17 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
-import { auth } from '../utils/auth_config';
+import { auth } from '../../auth';
 import { GlobalErrorHandler } from './GlobalErrorHandler';
+import { AuthenticatedRequest, UserSession } from '../interface/modified-request';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user: any;
-      session: any;
-    }
-  }
-}
-
-export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
+export const requireAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void | Response> => {
   try {
     const headers = new Headers();
     Object.entries(req.headers).forEach(([key, value]) => {
@@ -19,7 +15,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
     });
 
     const session = await auth.api.getSession({
-      headers,
+      headers: headers,
     });
 
     if (!session) {
@@ -29,8 +25,13 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
       });
     }
 
-    req['user'] = session.user;
-    req['session'] = session.session;
+    (req as unknown as AuthenticatedRequest).user = {
+      id: session.user.id,
+      username: session.user.name,
+      email: session.user.email,
+      avatarUrl: session.user.image || '',
+    };
+    (req as unknown as AuthenticatedRequest).session = session.session as UserSession;
     next();
   } catch (error) {
     GlobalErrorHandler.logger.error(`Auth middleware error: ${error}`);

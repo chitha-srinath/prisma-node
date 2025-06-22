@@ -1,14 +1,19 @@
 import { Response } from 'express';
 
 export class ResponseHandler {
-  static sucessResponse(res: Response, data: any, message = 'Success', statusCode = 200) {
+  static successResponse<T>(
+    res: Response,
+    data: T,
+    message = 'Success',
+    statusCode = 200,
+  ): Response {
     return res.status(statusCode).json({
       error: false,
       message,
       data,
     });
   }
-  static errorResponse(res: Response, message: string, statusCode = 500) {
+  static errorResponse(res: Response, message: string, statusCode = 500): Response {
     return res.status(statusCode).json({
       error: true,
       message,

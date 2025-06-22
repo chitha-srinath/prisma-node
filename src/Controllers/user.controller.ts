@@ -1,5 +1,10 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { DatabaseError, NotFoundError } from '../Utilities/ErrorUtility';
+import { ResponseHandler } from '../middlewares/ResponseHandler';
+import { PrismaErrorHandler } from '../Utilities/databaseErrors';
 import { UserService } from '../services/user.service';
+import { SuccessMessages } from '../constants/success-messages.constants';
+import { ErrorMessages } from '../constants/error-messages.constatnts';
 
 export class UserController {
   private userService: UserService;
@@ -8,56 +13,62 @@ export class UserController {
     this.userService = new UserService();
   }
 
-  async createuser(req: Request, res: Response) {
+  async createuser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const user = await this.userService.createuser(req.body);
-      res.status(201).json(user);
+      ResponseHandler.successResponse(res, user, SuccessMessages.USER.CREATED, 201);
     } catch (error) {
-      res.status(400).json({ error });
+      if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
+        return next(PrismaErrorHandler.handlePrismaError(error));
+      }
+      next(error);
     }
   }
 
-  async getAllusers(_req: Request, res: Response) {
+  async getAllusers(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const users = await this.userService.getAllusers();
-      res.status(200).json(users);
+      ResponseHandler.successResponse(res, users);
     } catch (error) {
-      res.status(500).json({ error });
+      next(error);
     }
   }
 
-  async getuserById(req: Request, res: Response) {
+  async getuserById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
       const user = await this.userService.getuserById(Number(id));
       if (!user) {
-        res.status(404).json({ message: 'user not found' });
+        next(new NotFoundError(ErrorMessages.USER.USER_NOT_FOUND));
         return;
       }
-      res.status(200).json(user);
+      ResponseHandler.successResponse(res, user);
     } catch (error) {
-      res.status(400).json({ error });
+      next(error);
     }
   }
 
-  async updateuser(req: Request, res: Response) {
+  async updateuser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;
       const data = req.body;
       const user = await this.userService.updateuser(Number(id), data);
-      res.status(200).json(user);
+      ResponseHandler.successResponse(res, user);
     } catch (error) {
-      res.status(400).json({ error });
+      if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
+        return next(PrismaErrorHandler.handlePrismaError(error));
+      }
+      next(error);
     }
   }
 
-  async deleteuser(req: Request, res: Response) {
+  async deleteuser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;
       await this.userService.deleteuser(Number(id));
-      res.status(204).send();
+      res.sendStatus(204);
     } catch (error) {
-      res.status(400).json({ error });
+      next(error);
     }
   }
 }

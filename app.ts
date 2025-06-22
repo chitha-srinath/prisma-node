@@ -7,7 +7,8 @@ import helmet from 'helmet';
 import indexRoutes from './src/routes/index.routes';
 import limiter from './src/utils/rate-limit';
 import { toNodeHandler } from 'better-auth/node';
-import { auth } from './src/utils/auth_config';
+import { auth } from './auth';
+import { config } from './src/config/config';
 export class App {
   public readonly app: Express;
 
@@ -21,20 +22,20 @@ export class App {
   private initializeMiddlewares(): void {
     this.app.use(
       cors({
-        origin: '*',
+        origin: config.frontend_url,
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
       }),
     );
-    this.app.all('/api/auth/*splat', toNodeHandler(auth));
-    this.app.use(express.json());
     this.app.disable('x-powered-by');
     this.app.use(helmet());
     this.app.use(limiter);
   }
 
   private initializeRoutes(): void {
+    this.app.all('/api/auth/*', toNodeHandler(auth));
+    this.app.use(express.json());
     this.app.get('/health', (_, res: Response) => {
       res.status(200).json({ status: 'healthy' });
     });

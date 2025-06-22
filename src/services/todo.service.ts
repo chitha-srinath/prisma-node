@@ -1,7 +1,7 @@
 import { Todo } from '@prisma/client';
-import { CreateTodoData, UpdateTodoData } from '../interface/todo';
-// import { BaseRepository } from '../repositories/baserepostiory';
+
 import { TodoRepository } from '../repositories/Todo.repostiory';
+import { CreateTodoData, UpdateTodoData } from '@/Dtos/todo.dto';
 
 export class TodoService {
   private todoRepository: TodoRepository;
@@ -22,7 +22,7 @@ export class TodoService {
     return this.todoRepository.findById(id);
   }
 
-  async updateTodo(id: number, data: UpdateTodoData) {
+  async updateTodo(id: number, data: UpdateTodoData): Promise<Todo> {
     const todo = await this.todoRepository.findById(id);
     if (!todo) {
       throw new Error('Todo not found');
