@@ -17,4 +17,7 @@ export const SuccessMessages = {
     UPDATED: 'Todo updated successfully',
     DELETED: 'Todo deleted successfully',
   },
+  AUTH: {
+    LOGIN_SUCCESSFULL: 'user login sucessfull',
+  },
 };

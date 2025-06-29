@@ -2,8 +2,9 @@ import { Prisma } from '@prisma/client';
 import { DatabaseError } from './ErrorUtility';
 
 export class PrismaErrorHandler {
-  static handlePrismaError(error: unknown): DatabaseError {
-    let errorMessage = 'Unexpected error';
+  static handlePrismaError(error: unknown): DatabaseError | void {
+    // let errorMessage = 'Unexpected error';
+    let errorMessage = null;
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       errorMessage = `Code: ${error.code} - ${error.message}`;
@@ -15,10 +16,10 @@ export class PrismaErrorHandler {
       errorMessage = `Initialization Error: ${error.errorCode} - ${error.message}`;
     } else if (error instanceof Prisma.PrismaClientValidationError) {
       errorMessage = `Validation Error: ${error.message}`;
-    } else {
-      errorMessage = `Unexpected error: ${String(error)}`;
     }
 
-    return new DatabaseError(errorMessage);
+    if (errorMessage) {
+      return new DatabaseError(errorMessage);
+    }
   }
 }

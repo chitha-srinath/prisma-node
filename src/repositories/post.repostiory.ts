@@ -1,7 +1,8 @@
 import { Post } from '@prisma/client';
 import { BaseRepository } from './baserepostiory';
+import { PrismaClient } from '@prisma/client';
 
-export class PostRepository extends BaseRepository<Post> {
+export class PostRepository extends BaseRepository<Post, PrismaClient['post']> {
   constructor() {
     super((prisma) => prisma.post);
   }

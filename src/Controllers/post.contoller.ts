@@ -9,7 +9,7 @@ import { CreatePostData } from '../Dtos/post.dto';
 import { AuthenticatedRequest } from '@/interface/modified-request';
 
 export class PostController {
-  private postService: PostService;
+  private readonly postService: PostService;
 
   constructor() {
     this.postService = new PostService();
@@ -34,7 +34,7 @@ export class PostController {
       const authenticatedReq = req as unknown as AuthenticatedRequest;
       console.log('get posts', authenticatedReq.user);
       const posts = await this.postService.getAllposts();
-      ResponseHandler.successResponse(res, posts);
+      ResponseHandler.successResponse(res, posts, 'fetched post successfully', 200);
     } catch (error) {
       next(error);
     }
@@ -66,6 +66,10 @@ export class PostController {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
         return next(PrismaErrorHandler.handlePrismaError(error));
       }
+      if (error instanceof NotFoundError) {
+        return next(new NotFoundError(error.message));
+      }
+
       next(error);
     }
   }

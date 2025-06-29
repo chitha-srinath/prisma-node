@@ -1,7 +1,7 @@
 import { Post } from '@prisma/client';
 import { PostRepository } from '../repositories/post.repostiory';
 import { CreatePostData, UpdatePostData } from '@/Dtos/post.dto';
-
+import { NotFoundError } from '../Utilities/ErrorUtility';
 export class PostService {
   private postRepository: PostRepository;
 
@@ -32,7 +32,7 @@ export class PostService {
   async updatepost(id: number, data: UpdatePostData): Promise<Post> {
     const post = await this.postRepository.findById(id);
     if (!post) {
-      throw new Error('post not found');
+      throw new NotFoundError('post not found');
     }
 
     const result = await this.postRepository.update(id, data);

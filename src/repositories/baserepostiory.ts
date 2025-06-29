@@ -1,25 +1,28 @@
 import { PrismaClient } from '@prisma/client';
 import { prismaConnection } from '../utils/database';
 
-export class BaseRepository<T> {
+export class BaseRepository<T, M> {
   protected prisma: PrismaClient;
-  protected getModel: () => any;
-  constructor(modelSelector: (prisma: PrismaClient) => any) {
+  protected getModel: () => M;
+  constructor(modelSelector: (prisma: PrismaClient) => M) {
     this.prisma = prismaConnection;
     this.getModel = () => modelSelector(this.prisma);
   }
 
   async insert(data: Partial<T>): Promise<T> {
+    // @ts-expect-error Prisma does not export a shared delegate interface
     const result = await this.getModel().create({ data });
     return result;
   }
 
   async insertMany(data: Partial<T>, duplicate = true): Promise<{ count: number }> {
+    // @ts-expect-error Prisma does not export a shared delegate interface
     const result = await this.getModel().createMany({ data, skipDuplicates: duplicate });
     return result;
   }
 
   async upsert(data: Partial<T>, update: Partial<T>): Promise<T> {
+    // @ts-expect-error Prisma does not export a shared delegate interface
     const result = await this.getModel().upsert({
       where: data,
       update: update,
@@ -40,6 +43,7 @@ export class BaseRepository<T> {
       order: 'asc' | 'desc';
     },
   ): Promise<T[]> {
+    // @ts-expect-error Prisma does not export a shared delegate interface
     const result = await this.getModel().findMany({
       where: data,
       ...(sort && {
@@ -58,6 +62,7 @@ export class BaseRepository<T> {
     select?: Record<string, boolean>,
     include?: Record<string, boolean>,
   ): Promise<T | null> {
+    // @ts-expect-error Prisma does not export a shared delegate interface
     const result = this.getModel().findUnique({
       where: { id },
       ...(select && { select }),
@@ -67,11 +72,13 @@ export class BaseRepository<T> {
   }
 
   async update(id: number, data: Partial<T>): Promise<T> {
+    // @ts-expect-error Prisma does not export a shared delegate interface
     const result = this.getModel().update({ where: { id }, data });
     return result;
   }
 
   async delete(id: number): Promise<T> {
+    // @ts-expect-error Prisma does not export a shared delegate interface
     const result = this.getModel().delete({ where: { id } });
     return result;
   }
@@ -87,6 +94,7 @@ export class BaseRepository<T> {
       order: 'asc' | 'desc';
     },
   ): Promise<T[]> {
+    // @ts-expect-error Prisma does not export a shared delegate interface
     const result = this.getModel().findMany({
       where: data,
       ...(sort && {
@@ -108,9 +116,10 @@ export class BaseRepository<T> {
     _count?: boolean;
     _sum?: boolean;
     _avg?: boolean;
-  }): Promise<any[]> {
-    const result = await this.getModel().groupBy(groupByQuery);
-    return result;
+  }): Promise<unknown> {
+    // @ts-expect-error Prisma does not export a shared delegate interface
+    const result = await this.getModel().groupBy?.(groupByQuery);
+    return result ?? [];
   }
 
   async aggaregatedData(query: {
@@ -119,8 +128,9 @@ export class BaseRepository<T> {
     _avg?: boolean;
     _min?: boolean;
     _max?: boolean;
-  }): Promise<any> {
-    const result = await this.getModel().aggregate(query);
-    return result;
+  }): Promise<unknown> {
+    // @ts-expect-error Prisma does not export a shared delegate interface
+    const result = await this.getModel().aggregate?.(query);
+    return result ?? null;
   }
 }
