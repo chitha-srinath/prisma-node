@@ -4,7 +4,7 @@ import { ResponseHandler } from '../middlewares/ResponseHandler';
 import { PrismaErrorHandler } from '../Utilities/databaseErrors';
 import { SuccessMessages } from '../constants/success-messages.constants';
 import { LoginPostDto, RegisterPostDto } from '@/Dtos/auth.dto';
-import { AuthService } from '@/services/Auth.service';
+import { AuthService } from '../services/Auth.service';
 import { AuthenticatedRequest } from '@/interface/modified-request';
 
 export class AuthController {
