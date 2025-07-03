@@ -7,12 +7,25 @@ import { LoginPostDto, RegisterPostDto } from '@/Dtos/auth.dto';
 import { AuthService } from '../services/Auth.service';
 import { AuthenticatedRequest } from '@/interface/modified-request';
 
+/**
+ * Controller for authentication-related endpoints.
+ * Handles login, registration, user fetching, and access token retrieval.
+ */
 export class AuthController {
   private readonly authService: AuthService;
+  /**
+   * Initializes the AuthController and its AuthService dependency.
+   */
   constructor() {
     this.authService = new AuthService();
   }
 
+  /**
+   * Handles user login.
+   * @param req Express request object containing login credentials in body
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const result = await this.authService.signIn(req.body as unknown as LoginPostDto);
@@ -25,6 +38,12 @@ export class AuthController {
     }
   }
 
+  /**
+   * Handles user registration.
+   * @param req Express request object containing registration data in body
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async register(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const result = await this.authService.signUp(req.body as unknown as RegisterPostDto);
@@ -34,10 +53,15 @@ export class AuthController {
     }
   }
 
+  /**
+   * Fetches the authenticated user's details from the request.
+   * @param req Express request object (should be AuthenticatedRequest)
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async fetchUserResult(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const authenticatedReq = req as unknown as AuthenticatedRequest;
-      console.log(authenticatedReq.user);
       const result = authenticatedReq.user;
       if (!result) {
         next(new UnauthorizedError('user not found'));
@@ -48,6 +72,12 @@ export class AuthController {
     }
   }
 
+  /**
+   * Retrieves a new access token using the refresh token from cookies.
+   * @param req Express request object (expects refreshToken cookie)
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async getAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const token = req?.cookies?.refreshToken as string;

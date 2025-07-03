@@ -6,13 +6,26 @@ import { UserService } from '../services/user.service';
 import { SuccessMessages } from '../constants/success-messages.constants';
 import { ErrorMessages } from '../constants/error-messages.constatnts';
 
+/**
+ * Controller for user-related endpoints.
+ * Handles user creation, retrieval, update, and deletion.
+ */
 export class UserController {
   private userService: UserService;
 
+  /**
+   * Initializes the UserController and its UserService dependency.
+   */
   constructor() {
     this.userService = new UserService();
   }
 
+  /**
+   * Creates a new user.
+   * @param req Express request object containing user data in body
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async createuser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const user = await this.userService.createuser(req.body);
@@ -25,6 +38,12 @@ export class UserController {
     }
   }
 
+  /**
+   * Retrieves all users.
+   * @param _req Express request object (unused)
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async getAllusers(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const users = await this.userService.getAllusers();
@@ -34,6 +53,12 @@ export class UserController {
     }
   }
 
+  /**
+   * Retrieves a user by their ID.
+   * @param req Express request object containing user ID in params
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async getuserById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
@@ -48,6 +73,12 @@ export class UserController {
     }
   }
 
+  /**
+   * Updates a user by their ID.
+   * @param req Express request object containing user ID in params and update data in body
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async updateuser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;
@@ -62,6 +93,12 @@ export class UserController {
     }
   }
 
+  /**
+   * Deletes a user by their ID.
+   * @param req Express request object containing user ID in params
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async deleteuser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;

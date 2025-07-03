@@ -6,13 +6,26 @@ import { TodoService } from '../services/todo.service';
 import { SuccessMessages } from '../constants/success-messages.constants';
 import { ErrorMessages } from '../constants/error-messages.constatnts';
 
+/**
+ * Controller for todo-related endpoints.
+ * Handles todo creation, retrieval, update, and deletion.
+ */
 export class TodoController {
   private todoService: TodoService;
 
+  /**
+   * Initializes the TodoController and its TodoService dependency.
+   */
   constructor() {
     this.todoService = new TodoService();
   }
 
+  /**
+   * Creates a new todo item.
+   * @param req Express request object containing todo data in body
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async createTodo(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const todo = await this.todoService.createTodo(req.body);
@@ -25,6 +38,12 @@ export class TodoController {
     }
   }
 
+  /**
+   * Retrieves all todo items.
+   * @param _req Express request object (unused)
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async getAllTodos(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const todos = await this.todoService.getAllTodos();
@@ -34,6 +53,12 @@ export class TodoController {
     }
   }
 
+  /**
+   * Retrieves a todo item by its ID.
+   * @param req Express request object containing todo ID in params
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async getTodoById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
@@ -48,6 +73,12 @@ export class TodoController {
     }
   }
 
+  /**
+   * Updates a todo item by its ID.
+   * @param req Express request object containing todo ID in params and update data in body
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async updateTodo(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;
@@ -62,6 +93,12 @@ export class TodoController {
     }
   }
 
+  /**
+   * Deletes a todo item by its ID.
+   * @param req Express request object containing todo ID in params
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async deleteTodo(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;

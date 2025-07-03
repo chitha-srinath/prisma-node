@@ -4,6 +4,7 @@ export enum ErrorTypeEnum {
   NOT_FOUND = 'NOT_FOUND',
   BAD_REQUEST = 'BAD_REQUEST',
   DATABASE = 'DATABASE',
+  FORBIDDEN = 'FORBIDDEN',
 }
 
 export enum ErrorMsgEnum {
@@ -12,4 +13,5 @@ export enum ErrorMsgEnum {
   NOT_FOUND = 'Resource not found',
   BAD_REQUEST = 'Bad request',
   DATABASE = 'Database error',
+  FORBIDDEN = 'Forbidden',
 }

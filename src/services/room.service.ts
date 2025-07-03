@@ -3,11 +3,24 @@ import { Server, Socket } from 'socket.io';
 type SocketEvent = string;
 type SocketData = unknown;
 
+/**
+ * Service for managing socket.io rooms and broadcasting events.
+ * Handles joining, leaving, and broadcasting to rooms.
+ */
 export class RoomService {
   private rooms: Map<string, Set<string>> = new Map();
 
+  /**
+   * Initializes the RoomService with a socket.io server instance.
+   * @param io The socket.io server instance
+   */
   constructor(private io: Server) {}
 
+  /**
+   * Adds a socket to a room and notifies all users in the room.
+   * @param socket The socket to join the room
+   * @param roomId The room ID to join
+   */
   joinRoom(socket: Socket, roomId: string): void {
     if (!this.rooms.has(roomId)) {
       this.rooms.set(roomId, new Set());
@@ -27,6 +40,11 @@ export class RoomService {
     });
   }
 
+  /**
+   * Removes a socket from a room and notifies all users in the room.
+   * @param socket The socket to leave the room
+   * @param roomId The room ID to leave
+   */
   leaveRoom(socket: Socket, roomId: string): void {
     const room = this.rooms.get(roomId);
     if (!room) return;
@@ -46,10 +64,21 @@ export class RoomService {
     });
   }
 
+  /**
+   * Gets the list of user IDs in a room.
+   * @param roomId The room ID
+   * @returns Array of user IDs in the room
+   */
   getRoomUsers(roomId: string): string[] {
     return Array.from(this.rooms.get(roomId) || new Set());
   }
 
+  /**
+   * Broadcasts an event with data to all users in a room.
+   * @param roomId The room ID
+   * @param event The event name
+   * @param data The data to broadcast
+   */
   broadcastToRoom(roomId: string, event: SocketEvent, data: SocketData): void {
     this.io.to(roomId).emit(event, data);
   }

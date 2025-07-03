@@ -34,6 +34,12 @@ export class BadRequestError extends AppError {
   }
 }
 
+export class ForbiddenError extends AppError {
+  constructor(message: string) {
+    super(ErrorTypeEnum.FORBIDDEN, message, 403);
+  }
+}
+
 export class DatabaseError extends AppError {
   constructor(message: string) {
     super(ErrorTypeEnum.DATABASE, message, 500);

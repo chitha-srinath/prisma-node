@@ -6,19 +6,30 @@ import { PostService } from '../services/post.service';
 import { SuccessMessages } from '../constants/success-messages.constants';
 import { ErrorMessages } from '../constants/error-messages.constatnts';
 import { CreatePostData } from '../Dtos/post.dto';
-import { AuthenticatedRequest } from '@/interface/modified-request';
 
+/**
+ * Controller for post-related endpoints.
+ * Handles post creation, retrieval, update, and deletion.
+ */
 export class PostController {
   private readonly postService: PostService;
 
+  /**
+   * Initializes the PostController and its PostService dependency.
+   */
   constructor() {
     this.postService = new PostService();
   }
 
+  /**
+   * Creates a new post.
+   * @param req Express request object containing post data in body
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async createpost(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const authenticatedReq = req as unknown as AuthenticatedRequest;
-      console.log(authenticatedReq.user);
+      // const authenticatedReq = req as unknown as AuthenticatedRequest;
       const post = await this.postService.createpost(req.body as unknown as CreatePostData);
       ResponseHandler.successResponse(res, post, SuccessMessages.POST.CREATED, 201); // keep response message in enum or db
     } catch (error) {
@@ -29,10 +40,15 @@ export class PostController {
     }
   }
 
+  /**
+   * Retrieves all posts.
+   * @param req Express request object (may contain user info)
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async getAllposts(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const authenticatedReq = req as unknown as AuthenticatedRequest;
-      console.log('get posts', authenticatedReq.user);
+      // const authenticatedReq = req as unknown as AuthenticatedRequest;
       const posts = await this.postService.getAllposts();
       ResponseHandler.successResponse(res, posts, 'fetched post successfully', 200);
     } catch (error) {
@@ -40,6 +56,12 @@ export class PostController {
     }
   }
 
+  /**
+   * Retrieves a post by its ID.
+   * @param req Express request object containing post ID in params
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async getpostById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
@@ -56,6 +78,12 @@ export class PostController {
     }
   }
 
+  /**
+   * Updates a post by its ID.
+   * @param req Express request object containing post ID in params and update data in body
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async updatepost(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;
@@ -66,14 +94,16 @@ export class PostController {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
         return next(PrismaErrorHandler.handlePrismaError(error));
       }
-      if (error instanceof NotFoundError) {
-        return next(new NotFoundError(error.message));
-      }
-
       next(error);
     }
   }
 
+  /**
+   * Deletes a post by its ID.
+   * @param req Express request object containing post ID in params
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
   async deletepost(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;
