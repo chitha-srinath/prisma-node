@@ -1,9 +1,11 @@
 import { Post, Prisma } from '@prisma/client';
-import { BaseRepository } from './baserepository';
+import { BaseRepository } from './baserepostiory';
 import { PrismaClient } from '@prisma/client';
 
 /**
- * Repository for Post entity, extends the generic BaseRepository.
+ * Repository for Post entity operations.
+ * Extends BaseRepository to provide type-safe database operations for Post model.
+ * Handles all CRUD operations and advanced queries for post data.
  */
 export class PostRepository extends BaseRepository<
   Post,
@@ -14,21 +16,20 @@ export class PostRepository extends BaseRepository<
   PrismaClient['post']
 > {
   /**
-   * Initializes the PostRepository with the Prisma post model.
+   * Initializes the PostRepository with Prisma post model.
+   * Sets up the repository to work with the Post entity in the database.
    */
   constructor() {
     super((prisma: PrismaClient) => prisma.post);
   }
 
   /**
-   * Finds posts matching a query.
+   * Finds posts matching a partial query object.
+   * Provides a convenient way to search posts using partial Post properties.
    * @param matchQuery Partial query object for filtering posts
-   * @returns Array of Post objects matching the query
+   * @returns Promise resolving to an array of Post objects matching the query
    */
   async findbyQuery(matchQuery: Partial<Post>): Promise<Post[]> {
-    const result = await this.getModel().findMany({
-      where: matchQuery,
-    });
-    return result;
+    return this.findAll(matchQuery as Prisma.PostWhereInput);
   }
 }

@@ -8,7 +8,8 @@ import { ErrorMessages } from '../constants/error-messages.constatnts';
 
 /**
  * Controller for user-related endpoints.
- * Handles user creation, retrieval, update, and deletion.
+ * Handles user creation, retrieval, update, and deletion operations.
+ * Provides HTTP interface for user management functionality.
  */
 export class UserController {
   private userService: UserService;
@@ -21,14 +22,18 @@ export class UserController {
   }
 
   /**
-   * Creates a new user.
+   * Creates a new user with the provided data.
    * @param req Express request object containing user data in body
    * @param res Express response object
    * @param next Express next function for error handling
    */
   async createuser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const user = await this.userService.createuser(req.body);
+      const userData = {
+        ...req.body,
+        emailVerified: req.body.emailVerified ?? false,
+      };
+      const user = await this.userService.createuser(userData);
       ResponseHandler.successResponse(res, user, SuccessMessages.USER.CREATED, 201);
     } catch (error) {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
@@ -39,7 +44,7 @@ export class UserController {
   }
 
   /**
-   * Retrieves all users.
+   * Retrieves all users from the system.
    * @param _req Express request object (unused)
    * @param res Express response object
    * @param next Express next function for error handling
@@ -54,7 +59,7 @@ export class UserController {
   }
 
   /**
-   * Retrieves a user by their ID.
+   * Retrieves a specific user by their ID.
    * @param req Express request object containing user ID in params
    * @param res Express response object
    * @param next Express next function for error handling
@@ -74,7 +79,7 @@ export class UserController {
   }
 
   /**
-   * Updates a user by their ID.
+   * Updates an existing user with new data.
    * @param req Express request object containing user ID in params and update data in body
    * @param res Express response object
    * @param next Express next function for error handling

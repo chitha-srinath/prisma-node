@@ -1,16 +1,24 @@
-import { Todo } from '@prisma/client';
+import { Todo, PrismaClient, Prisma } from '@prisma/client';
 import { BaseRepository } from './baserepostiory';
-import { PrismaClient } from '@prisma/client';
 
 /**
- * Repository for Todo entity, extends the generic BaseRepository.
+ * Repository for Todo entity operations.
+ * Extends BaseRepository to provide type-safe database operations for Todo model.
+ * Handles all CRUD operations and advanced queries for todo data.
  */
-// Todo repository implementation
-export class TodoRepository extends BaseRepository<Todo, PrismaClient['todo']> {
+export class TodoRepository extends BaseRepository<
+  Todo,
+  Prisma.TodoCreateInput,
+  Prisma.TodoUpdateInput,
+  Prisma.TodoWhereInput,
+  Prisma.TodoWhereUniqueInput,
+  PrismaClient['todo']
+> {
   /**
-   * Initializes the TodoRepository with the Prisma todo model.
+   * Initializes the TodoRepository with Prisma todo model.
+   * Sets up the repository to work with the Todo entity in the database.
    */
   constructor() {
-    super((prisma) => prisma.todo);
+    super((prisma: PrismaClient) => prisma.todo);
   }
 }

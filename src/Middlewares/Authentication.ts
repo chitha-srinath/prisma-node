@@ -6,6 +6,14 @@ import { UnauthorizedError } from '@/Utilities/ErrorUtility';
 import { verifyJwtToken } from '@/Utilities/encrypt-hash';
 import { ErrorMessages } from '@/constants/error-messages.constatnts';
 
+/**
+ * Middleware that validates JWT authentication tokens.
+ * Extracts the token from the Authorization header, verifies it, and attaches user data to the request.
+ * @param req Express request object
+ * @param res Express response object
+ * @param next Express next function
+ * @returns Promise that resolves to void or Response
+ */
 export const requireAuth = async (
   req: Request,
   res: Response,
@@ -38,7 +46,9 @@ export const requireAuth = async (
 
     next();
   } catch (error) {
-    GlobalErrorHandler.logger.error(`Auth middleware error: ${error}`);
+    GlobalErrorHandler.logger.error(
+      `Auth middleware error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    );
     return res.status(401).json({
       success: false,
       error: 'Invalid authentication',

@@ -8,7 +8,8 @@ import { ErrorMessages } from '../constants/error-messages.constatnts';
 
 /**
  * Controller for todo-related endpoints.
- * Handles todo creation, retrieval, update, and deletion.
+ * Handles todo creation, retrieval, update, and deletion operations.
+ * Provides HTTP interface for todo management functionality.
  */
 export class TodoController {
   private todoService: TodoService;
@@ -21,7 +22,7 @@ export class TodoController {
   }
 
   /**
-   * Creates a new todo item.
+   * Creates a new todo item with the provided data.
    * @param req Express request object containing todo data in body
    * @param res Express response object
    * @param next Express next function for error handling
@@ -39,7 +40,7 @@ export class TodoController {
   }
 
   /**
-   * Retrieves all todo items.
+   * Retrieves all todo items from the system.
    * @param _req Express request object (unused)
    * @param res Express response object
    * @param next Express next function for error handling
@@ -54,7 +55,7 @@ export class TodoController {
   }
 
   /**
-   * Retrieves a todo item by its ID.
+   * Retrieves a specific todo item by its ID.
    * @param req Express request object containing todo ID in params
    * @param res Express response object
    * @param next Express next function for error handling
@@ -74,7 +75,7 @@ export class TodoController {
   }
 
   /**
-   * Updates a todo item by its ID.
+   * Updates an existing todo item with new data.
    * @param req Express request object containing todo ID in params and update data in body
    * @param res Express response object
    * @param next Express next function for error handling

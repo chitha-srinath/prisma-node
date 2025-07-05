@@ -1,54 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { prismaConnection } from '../utils/database';
 
-// Define the common Prisma model interface with proper generic constraints
-interface PrismaModel<T, CreateInput, UpdateInput, WhereInput, WhereUniqueInput> {
-  create: (args: { data: CreateInput }) => Promise<T>;
-  createMany: (args: {
-    data: CreateInput[];
-    skipDuplicates?: boolean;
-  }) => Promise<{ count: number }>;
-  upsert: (args: {
-    where: WhereUniqueInput;
-    update: UpdateInput;
-    create: CreateInput;
-  }) => Promise<T>;
-  findMany: (args?: {
-    where?: WhereInput;
-    select?: Record<string, boolean>;
-    include?: Record<string, boolean>;
-    orderBy?: Record<string, 'asc' | 'desc'>;
-    skip?: number;
-    take?: number;
-  }) => Promise<T[]>;
-  findUnique: (args: {
-    where: WhereUniqueInput;
-    select?: Record<string, boolean>;
-    include?: Record<string, boolean>;
-  }) => Promise<T | null>;
-  update: (args: {
-    where: WhereUniqueInput;
-    data: UpdateInput;
-    select?: Record<string, boolean>;
-    include?: Record<string, boolean>;
-  }) => Promise<T>;
-  updateMany: (args: { where: WhereInput; data: UpdateInput }) => Promise<{ count: number }>;
-  delete: (args: { where: WhereUniqueInput }) => Promise<T>;
-  groupBy?: (args: {
-    by: string[];
-    _count?: boolean;
-    _sum?: Record<string, boolean>;
-    _avg?: Record<string, boolean>;
-  }) => Promise<unknown>;
-  aggregate?: (args: {
-    _count?: boolean;
-    _sum?: Record<string, boolean>;
-    _avg?: Record<string, boolean>;
-    _min?: Record<string, boolean>;
-    _max?: Record<string, boolean>;
-  }) => Promise<unknown>;
-}
-
 /**
  * Generic base repository for Prisma models.
  * Provides common CRUD and utility operations for any entity.
@@ -59,14 +11,7 @@ interface PrismaModel<T, CreateInput, UpdateInput, WhereInput, WhereUniqueInput>
  * @template WhereUniqueInput Prisma where unique input type
  * @template M Prisma model type
  */
-export class BaseRepository<
-  T,
-  CreateInput,
-  UpdateInput,
-  WhereInput,
-  WhereUniqueInput,
-  M extends PrismaModel<T, CreateInput, UpdateInput, WhereInput, WhereUniqueInput>,
-> {
+export class BaseRepository<T, CreateInput, UpdateInput, WhereInput, WhereUniqueInput, M> {
   protected prisma: PrismaClient;
   protected getModel: () => M;
 
@@ -85,7 +30,8 @@ export class BaseRepository<
    * @returns The created entity
    */
   async insert(data: CreateInput): Promise<T> {
-    const result = await this.getModel().create({ data });
+    const model = this.getModel() as { create: (args: { data: CreateInput }) => Promise<T> };
+    const result = await model.create({ data });
     return result;
   }
 
@@ -96,7 +42,13 @@ export class BaseRepository<
    * @returns Object with count of inserted records
    */
   async insertMany(data: CreateInput[], skipDuplicates = true): Promise<{ count: number }> {
-    const result = await this.getModel().createMany({ data, skipDuplicates });
+    const model = this.getModel() as {
+      createMany: (args: {
+        data: CreateInput[];
+        skipDuplicates?: boolean;
+      }) => Promise<{ count: number }>;
+    };
+    const result = await model.createMany({ data, skipDuplicates });
     return result;
   }
 
@@ -108,7 +60,14 @@ export class BaseRepository<
    * @returns The upserted entity
    */
   async upsert(where: WhereUniqueInput, update: UpdateInput, create: CreateInput): Promise<T> {
-    const result = await this.getModel().upsert({
+    const model = this.getModel() as {
+      upsert: (args: {
+        where: WhereUniqueInput;
+        update: UpdateInput;
+        create: CreateInput;
+      }) => Promise<T>;
+    };
+    const result = await model.upsert({
       where,
       update,
       create,
@@ -130,7 +89,17 @@ export class BaseRepository<
     include?: Record<string, boolean>,
     orderBy?: Record<string, 'asc' | 'desc'>,
   ): Promise<T[]> {
-    const result = await this.getModel().findMany({
+    const model = this.getModel() as {
+      findMany: (args?: {
+        where?: WhereInput;
+        select?: Record<string, boolean>;
+        include?: Record<string, boolean>;
+        orderBy?: Record<string, 'asc' | 'desc'>;
+        skip?: number;
+        take?: number;
+      }) => Promise<T[]>;
+    };
+    const result = await model.findMany({
       where,
       ...(orderBy && { orderBy }),
       ...(select && { select }),
@@ -151,7 +120,14 @@ export class BaseRepository<
     select?: Record<string, boolean>,
     include?: Record<string, boolean>,
   ): Promise<T | null> {
-    const result = await this.getModel().findUnique({
+    const model = this.getModel() as {
+      findUnique: (args: {
+        where: WhereUniqueInput;
+        select?: Record<string, boolean>;
+        include?: Record<string, boolean>;
+      }) => Promise<T | null>;
+    };
+    const result = await model.findUnique({
       where,
       ...(select && { select }),
       ...(include && { include }),
@@ -171,7 +147,14 @@ export class BaseRepository<
     select?: Record<string, boolean>,
     include?: Record<string, boolean>,
   ): Promise<T | null> {
-    const result = await this.getModel().findUnique({
+    const model = this.getModel() as {
+      findUnique: (args: {
+        where: WhereUniqueInput;
+        select?: Record<string, boolean>;
+        include?: Record<string, boolean>;
+      }) => Promise<T | null>;
+    };
+    const result = await model.findUnique({
       where: { id } as WhereUniqueInput,
       ...(select && { select }),
       ...(include && { include }),
@@ -193,7 +176,15 @@ export class BaseRepository<
     select?: Record<string, boolean>,
     include?: Record<string, boolean>,
   ): Promise<T> {
-    const result = await this.getModel().update({
+    const model = this.getModel() as {
+      update: (args: {
+        where: WhereUniqueInput;
+        data: UpdateInput;
+        select?: Record<string, boolean>;
+        include?: Record<string, boolean>;
+      }) => Promise<T>;
+    };
+    const result = await model.update({
       where,
       data,
       ...(select && { select }),
@@ -209,7 +200,10 @@ export class BaseRepository<
    * @returns Object with count of updated records
    */
   async updateMany(where: WhereInput, data: UpdateInput): Promise<{ count: number }> {
-    const result = await this.getModel().updateMany({ where, data });
+    const model = this.getModel() as {
+      updateMany: (args: { where: WhereInput; data: UpdateInput }) => Promise<{ count: number }>;
+    };
+    const result = await model.updateMany({ where, data });
     return result;
   }
 
@@ -219,7 +213,8 @@ export class BaseRepository<
    * @returns The deleted entity
    */
   async deleteUnique(where: WhereUniqueInput): Promise<T> {
-    const result = await this.getModel().delete({ where });
+    const model = this.getModel() as { delete: (args: { where: WhereUniqueInput }) => Promise<T> };
+    const result = await model.delete({ where });
     return result;
   }
 
@@ -229,7 +224,8 @@ export class BaseRepository<
    * @returns The deleted entity
    */
   async delete(id: number): Promise<T> {
-    const result = await this.getModel().delete({ where: { id } as WhereUniqueInput });
+    const model = this.getModel() as { delete: (args: { where: WhereUniqueInput }) => Promise<T> };
+    const result = await model.delete({ where: { id } as WhereUniqueInput });
     return result;
   }
 
@@ -251,7 +247,17 @@ export class BaseRepository<
     include?: Record<string, boolean>,
     orderBy?: Record<string, 'asc' | 'desc'>,
   ): Promise<T[]> {
-    const result = await this.getModel().findMany({
+    const model = this.getModel() as {
+      findMany: (args?: {
+        where?: WhereInput;
+        select?: Record<string, boolean>;
+        include?: Record<string, boolean>;
+        orderBy?: Record<string, 'asc' | 'desc'>;
+        skip?: number;
+        take?: number;
+      }) => Promise<T[]>;
+    };
+    const result = await model.findMany({
       where,
       ...(orderBy && { orderBy }),
       skip,
@@ -273,7 +279,14 @@ export class BaseRepository<
     _sum?: Record<string, boolean>;
     _avg?: Record<string, boolean>;
   }): Promise<unknown> {
-    const model = this.getModel();
+    const model = this.getModel() as {
+      groupBy?: (args: {
+        by: string[];
+        _count?: boolean;
+        _sum?: Record<string, boolean>;
+        _avg?: Record<string, boolean>;
+      }) => Promise<unknown>;
+    };
     if (!model.groupBy) {
       throw new Error('GroupBy operation not supported for this model');
     }
@@ -293,7 +306,15 @@ export class BaseRepository<
     _min?: Record<string, boolean>;
     _max?: Record<string, boolean>;
   }): Promise<unknown> {
-    const model = this.getModel();
+    const model = this.getModel() as {
+      aggregate?: (args: {
+        _count?: boolean;
+        _sum?: Record<string, boolean>;
+        _avg?: Record<string, boolean>;
+        _min?: Record<string, boolean>;
+        _max?: Record<string, boolean>;
+      }) => Promise<unknown>;
+    };
     if (!model.aggregate) {
       throw new Error('Aggregate operation not supported for this model');
     }

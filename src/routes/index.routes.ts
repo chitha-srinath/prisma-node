@@ -4,15 +4,26 @@ import { PostRoutes } from './post.routes';
 import { UserRoutes } from './user.routes';
 import { AuthRoutes } from './auth.routes';
 
+/**
+ * Main application router that combines all feature-specific routes.
+ * Provides centralized route management and organization for the API.
+ */
 export class AppRouter {
   private router: Router;
 
+  /**
+   * Initializes the main router and sets up all application routes.
+   */
   constructor() {
     this.router = Router();
 
     this.initializeRoutes();
   }
 
+  /**
+   * Sets up all feature-specific routes under their respective prefixes.
+   * Organizes routes by functionality for better maintainability.
+   */
   private initializeRoutes(): void {
     this.router.use('/todos', new TodoRoutes().getRouter());
     this.router.use('/posts', new PostRoutes().getRouter());
@@ -20,6 +31,10 @@ export class AppRouter {
     this.router.use('/auth', new AuthRoutes().getRouter());
   }
 
+  /**
+   * Returns the configured Express router instance.
+   * @returns Express Router instance with all routes configured
+   */
   public getRouter(): Router {
     return this.router;
   }

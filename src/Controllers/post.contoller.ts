@@ -9,7 +9,8 @@ import { CreatePostData } from '../Dtos/post.dto';
 
 /**
  * Controller for post-related endpoints.
- * Handles post creation, retrieval, update, and deletion.
+ * Handles post creation, retrieval, update, and deletion operations.
+ * Provides HTTP interface for post management functionality.
  */
 export class PostController {
   private readonly postService: PostService;
@@ -22,16 +23,15 @@ export class PostController {
   }
 
   /**
-   * Creates a new post.
+   * Creates a new post with the provided data.
    * @param req Express request object containing post data in body
    * @param res Express response object
    * @param next Express next function for error handling
    */
   async createpost(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      // const authenticatedReq = req as unknown as AuthenticatedRequest;
       const post = await this.postService.createpost(req.body as unknown as CreatePostData);
-      ResponseHandler.successResponse(res, post, SuccessMessages.POST.CREATED, 201); // keep response message in enum or db
+      ResponseHandler.successResponse(res, post, SuccessMessages.POST.CREATED, 201);
     } catch (error) {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
         return next(PrismaErrorHandler.handlePrismaError(error));
@@ -41,23 +41,22 @@ export class PostController {
   }
 
   /**
-   * Retrieves all posts.
+   * Retrieves all posts from the system.
    * @param req Express request object (may contain user info)
    * @param res Express response object
    * @param next Express next function for error handling
    */
   async getAllposts(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      // const authenticatedReq = req as unknown as AuthenticatedRequest;
       const posts = await this.postService.getAllposts();
-      ResponseHandler.successResponse(res, posts, 'fetched post successfully', 200);
+      ResponseHandler.successResponse(res, posts, 'Fetched posts successfully', 200);
     } catch (error) {
       next(error);
     }
   }
 
   /**
-   * Retrieves a post by its ID.
+   * Retrieves a specific post by its ID.
    * @param req Express request object containing post ID in params
    * @param res Express response object
    * @param next Express next function for error handling
@@ -67,8 +66,6 @@ export class PostController {
       const { id } = req.params;
       const post = await this.postService.getpostById(Number(id));
       if (!post) {
-        //throw new Error();
-        // throw new Error('Not Found');
         next(new NotFoundError(ErrorMessages.POST.POST_NOT_FOUND));
         return;
       }
@@ -79,7 +76,7 @@ export class PostController {
   }
 
   /**
-   * Updates a post by its ID.
+   * Updates an existing post with new data.
    * @param req Express request object containing post ID in params and update data in body
    * @param res Express response object
    * @param next Express next function for error handling
@@ -108,7 +105,6 @@ export class PostController {
     try {
       const id = req.params.id;
       await this.postService.deletepost(Number(id));
-      //ResponseHandler.sucessResponse(res, undefined, undefined, 204);
       res.sendStatus(204);
     } catch (error) {
       next(error);

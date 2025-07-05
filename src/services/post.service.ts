@@ -6,6 +6,7 @@ import { NotFoundError } from '../Utilities/ErrorUtility';
 /**
  * Service for post-related business logic.
  * Handles creation, retrieval, update, and deletion of posts.
+ * Provides a clean interface between controllers and repositories.
  */
 export class PostService {
   private postRepository: PostRepository;
@@ -18,33 +19,36 @@ export class PostService {
   }
 
   /**
-   * Creates a new post.
-   * @param data Data for the new post
-   * @returns The created Post object
+   * Creates a new post with the provided data.
+   * @param data Data for the new post including title, description, and user ID
+   * @returns Promise resolving to the created Post object
    */
   async createpost(data: CreatePostData): Promise<Post> {
     const result = await this.postRepository.insert({
-      ...data,
-      userId: String(data.userId),
+      title: data.title,
+      description: data.description,
+      user: {
+        connect: {
+          id: data.userId,
+        },
+      },
     });
     return result;
   }
 
   /**
-   * Retrieves all posts.
-   * @returns Array of Post objects
+   * Retrieves all posts from the database.
+   * @returns Promise resolving to an array of Post objects
    */
   async getAllposts(): Promise<Post[]> {
-    // let result = await this.postRepository.findbyQuery({userId : 10});
-
     const result = await this.postRepository.findAll();
     return result;
   }
 
   /**
-   * Retrieves a post by its ID.
-   * @param id Post ID
-   * @returns The Post object or null if not found
+   * Retrieves a specific post by its ID.
+   * @param id The unique identifier of the post
+   * @returns Promise resolving to the Post object or null if not found
    */
   async getpostById(id: number): Promise<Post | null> {
     const result = await this.postRepository.findById(id);
@@ -52,33 +56,30 @@ export class PostService {
   }
 
   /**
-   * Updates a post by its ID.
-   * @param id Post ID
-   * @param data Data to update the post
-   * @returns The updated Post object
-   * @throws NotFoundError if post is not found
+   * Updates an existing post with new data.
+   * @param id The unique identifier of the post to update
+   * @param data The new data to update the post with
+   * @returns Promise resolving to the updated Post object
+   * @throws NotFoundError if the post with the given ID is not found
    */
   async updatepost(id: number, data: UpdatePostData): Promise<Post> {
     const post = await this.postRepository.update({ id }, data);
     if (!post) {
-      throw new NotFoundError('post not found');
+      throw new NotFoundError('Post not found');
     }
     return post;
-
-    // const result = await this.postRepository.update(id, data);
-    // return result;
   }
 
   /**
    * Deletes a post by its ID.
-   * @param id Post ID
-   * @returns The deleted Post object
-   * @throws Error if post is not found
+   * @param id The unique identifier of the post to delete
+   * @returns Promise resolving to the deleted Post object
+   * @throws NotFoundError if the post with the given ID is not found
    */
   async deletepost(id: number): Promise<Post> {
     const post = await this.postRepository.findById(id);
     if (!post) {
-      throw new Error('post not found');
+      throw new NotFoundError('Post not found');
     }
 
     const result = await this.postRepository.delete(id);
