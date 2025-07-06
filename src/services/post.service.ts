@@ -62,9 +62,9 @@ export class PostService {
    * @returns Promise resolving to the updated Post object
    * @throws NotFoundError if the post with the given ID is not found
    */
-  async updatepost(id: number, data: UpdatePostData): Promise<Post> {
-    const post = await this.postRepository.update({ id }, data);
-    if (!post) {
+  async updatepost(id: number, data: UpdatePostData): Promise<{ count: number }> {
+    const post = await this.postRepository.updateMany({ id }, data, 1);
+    if (!post.count) {
       throw new NotFoundError('Post not found');
     }
     return post;

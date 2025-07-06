@@ -199,11 +199,19 @@ export class BaseRepository<T, CreateInput, UpdateInput, WhereInput, WhereUnique
    * @param data Data to update
    * @returns Object with count of updated records
    */
-  async updateMany(where: WhereInput, data: UpdateInput): Promise<{ count: number }> {
+  async updateMany(
+    where: WhereInput,
+    data: UpdateInput,
+    limit?: number,
+  ): Promise<{ count: number }> {
     const model = this.getModel() as {
-      updateMany: (args: { where: WhereInput; data: UpdateInput }) => Promise<{ count: number }>;
+      updateMany: (args: {
+        where: WhereInput;
+        data: UpdateInput;
+        limit?: number;
+      }) => Promise<{ count: number }>;
     };
-    const result = await model.updateMany({ where, data });
+    const result = await model.updateMany({ where, data, limit });
     return result;
   }
 

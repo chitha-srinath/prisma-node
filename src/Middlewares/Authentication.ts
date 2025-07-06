@@ -5,6 +5,7 @@ import { AuthenticatedRequest } from '../interface/modified-request';
 import { UnauthorizedError } from '@/Utilities/ErrorUtility';
 import { verifyJwtToken } from '@/Utilities/encrypt-hash';
 import { ErrorMessages } from '@/constants/error-messages.constatnts';
+import { ResponseHandler } from './ResponseHandler';
 
 /**
  * Middleware that validates JWT authentication tokens.
@@ -49,9 +50,6 @@ export const requireAuth = async (
     GlobalErrorHandler.logger.error(
       `Auth middleware error: ${error instanceof Error ? error.message : 'Unknown error'}`,
     );
-    return res.status(401).json({
-      success: false,
-      error: 'Invalid authentication',
-    });
+    return ResponseHandler.errorResponse(res, 'Invalid authentication', 401);
   }
 };
