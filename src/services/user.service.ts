@@ -1,5 +1,5 @@
 import { CreateUserData, UpdateUserData } from '@/Dtos/user.dto';
-import { UserRepository } from '../repositories/user.repositiory';
+import { UserRepository, AccountRespository } from '../repositories/user.repositiory';
 import { User } from '@prisma/client';
 import { NotFoundError } from '../Utilities/ErrorUtility';
 
@@ -10,12 +10,14 @@ import { NotFoundError } from '../Utilities/ErrorUtility';
  */
 export class UserService {
   private userRepository: UserRepository;
+  private accountRepository: AccountRespository;
 
   /**
    * Initializes the UserService and its UserRepository dependency.
    */
   constructor() {
     this.userRepository = new UserRepository();
+    this.accountRepository = new AccountRespository();
   }
 
   /**
@@ -71,5 +73,61 @@ export class UserService {
       throw new NotFoundError('User not found');
     }
     return this.userRepository.delete(id);
+  }
+
+  /**
+   * Finds a user by Google info or creates a new one if not found. Links Google account if needed.
+   * @param googleUserInfo Google user info object
+   * @returns Promise resolving to the found or created User object
+   */
+  async findOrCreateGoogleUser(googleUserInfo: {
+    email: string;
+    id: string;
+    name: string;
+    picture?: string;
+  }): Promise<User> {
+    // Try to find user by email
+    let user = await this.userRepository.findFirst({ email: googleUserInfo.email });
+
+    if (!user) {
+      // Create new user
+      user = await this.userRepository.insert({
+        email: googleUserInfo.email,
+        name: googleUserInfo.name,
+        emailVerified: true,
+        image: googleUserInfo.picture,
+        createdAt: new Date(),
+      });
+    } else if (!user.emailVerified) {
+      // Optionally update emailVerified and image if not set
+      user = await this.userRepository.update(
+        { id: String(user.id) },
+        {
+          emailVerified: true,
+          image: googleUserInfo.picture,
+        },
+      );
+    }
+
+    // Add or update Account for Google provider
+    const providerId = 'google';
+    const accountId = googleUserInfo.id;
+    const existingAccount = await this.accountRepository.findFirst({
+      providerId,
+      accountId,
+      userId: user.id,
+    });
+    if (!existingAccount) {
+      await this.accountRepository.insert({
+        id: accountId, // assuming Google ID is unique
+        accountId,
+        providerId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        user: { connect: { id: user.id } },
+      });
+    }
+
+    return user;
   }
 }

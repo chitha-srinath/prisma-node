@@ -4,8 +4,11 @@ import { ResponseHandler } from '../middlewares/ResponseHandler';
 import { PrismaErrorHandler } from '../Utilities/databaseErrors';
 import { SuccessMessages } from '../constants/success-messages.constants';
 import { LoginPostDto, RegisterPostDto } from '@/Dtos/auth.dto';
-import { AuthService } from '../services/Auth.service';
+import { AuthService } from '../services/Authentication/Auth.service';
 import { AuthenticatedRequest } from '@/interface/modified-request';
+import { GoogleOAuthService } from '../services/Authentication/google.auth';
+import { UserService } from '../services/user.service';
+// import { randomUUID } from 'crypto';
 
 /**
  * Controller for authentication-related endpoints.
@@ -13,11 +16,15 @@ import { AuthenticatedRequest } from '@/interface/modified-request';
  */
 export class AuthController {
   private readonly authService: AuthService;
+  private readonly googleService: GoogleOAuthService;
+  private readonly userService: UserService;
   /**
    * Initializes the AuthController and its AuthService dependency.
    */
   constructor() {
     this.authService = new AuthService();
+    this.googleService = new GoogleOAuthService();
+    this.userService = new UserService();
   }
 
   /**
@@ -93,6 +100,77 @@ export class AuthController {
         return next(PrismaErrorHandler.handlePrismaError(error));
       }
       next(error);
+    }
+  }
+
+  googleOauth(req: Request, res: Response, next: NextFunction): void {
+    try {
+      const googleRedirectURI = this.googleService.getAuthUrl();
+      res.redirect(googleRedirectURI);
+    } catch (err) {
+      next(err);
+    }
+  }
+  async googleLogin(req: Request, res: Response): Promise<void> {
+    try {
+      const { code, error } = req.query;
+
+      // Handle OAuth errors
+      if (error) {
+        return res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_error`);
+      }
+
+      const codeStr =
+        typeof code === 'string'
+          ? code
+          : Array.isArray(code) && typeof code[0] === 'string'
+          ? code[0]
+          : undefined;
+      if (!codeStr) {
+        return res.redirect(`${process.env.FRONTEND_URL}/login?error=missing_code`);
+      }
+      const googleTokens = (await this.googleService.exchangeCodeForTokens(codeStr)) as {
+        access_token: string;
+      };
+
+      // Get user info from Google
+      const googleUserInfo = await this.googleService.getUserInfo(googleTokens.access_token);
+
+      // Find or create user in your database
+      const user = await this.userService.findOrCreateGoogleUser(
+        googleUserInfo as { email: string; id: string; name: string; picture?: string },
+      );
+
+      // // Generate your own tokens
+      // const sessionId = randomUUID();
+      // const accessToken = TokenService.generateAccessToken({
+      //   userId: user._id,
+      //   email: user.email,
+      //   sessionId: sessionId,
+      // });
+
+      // const refreshToken = TokenService.generateRefreshToken({
+      //   sessionId: sessionId,
+      //   userId: user._id,
+      // });
+
+      // // Save session in your database
+      // await SessionService.createSession(user._id, refreshToken, accessToken);
+
+      // Set refresh token in secure cookie
+      // res.cookie('refreshToken', refreshToken, {
+      //   httpOnly: true,
+      //   secure: process.env.NODE_ENV === 'production',
+      //   sameSite: 'strict',
+      //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days0
+      // });
+
+      // // Redirect to frontend with access token
+      // res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${accessToken}`);
+      ResponseHandler.successResponse(res, user);
+    } catch (error) {
+      console.error('Google OAuth error:', error);
+      res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_failed`);
     }
   }
 }
