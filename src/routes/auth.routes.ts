@@ -1,3 +1,4 @@
+import { requireAuth } from '../middlewares/Authentication';
 import { AuthController } from '../Controllers/auth.controller';
 import { Router } from 'express';
 
@@ -25,8 +26,13 @@ export class AuthRoutes {
   private initializeRoutes(): void {
     this.router.post('/login', this.authController.login.bind(this.authController));
     this.router.post('/register', this.authController.register.bind(this.authController));
-    this.router.get('/user-details', this.authController.fetchUserResult.bind(this.authController));
+    this.router.get(
+      '/user-details',
+      requireAuth,
+      this.authController.fetchUserResult.bind(this.authController),
+    );
     this.router.get('/access-token', this.authController.getAccessToken.bind(this.authController));
+    this.router.post('/logout', requireAuth, this.authController.logout.bind(this.authController));
     this.router.get('/google', this.authController.googleOauth.bind(this.authController));
     this.router.get('/google/callback', this.authController.googleLogin.bind(this.authController));
   }

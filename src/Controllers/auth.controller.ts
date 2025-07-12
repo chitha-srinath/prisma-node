@@ -8,6 +8,10 @@ import { AuthService } from '../services/Authentication/Auth.service';
 import { AuthenticatedRequest } from '@/interface/modified-request';
 import { GoogleOAuthService } from '../services/Authentication/google.auth';
 import { UserService } from '../services/user.service';
+import { config } from '../config/config';
+import { generateJwtToken } from '../Utilities/encrypt-hash';
+import { randomUUID } from 'node:crypto';
+
 // import { randomUUID } from 'crypto';
 
 /**
@@ -36,7 +40,23 @@ export class AuthController {
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const result = await this.authService.signIn(req.body as unknown as LoginPostDto);
-      ResponseHandler.successResponse(res, result, SuccessMessages.AUTH.LOGIN_SUCCESSFULL, 200); // keep response message in enum or db
+
+      //Set refresh token in secure cookie
+      res.cookie('refresh-token', result.refreshToken, {
+        signed: true,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days0
+      });
+
+      ResponseHandler.successResponse(
+        res,
+        { token: result.accessToken },
+        SuccessMessages.AUTH.LOGIN_SUCCESSFULL,
+        200,
+      ); // keep response message in enum or db
     } catch (error) {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
         return next(PrismaErrorHandler.handlePrismaError(error));
@@ -70,11 +90,11 @@ export class AuthController {
     try {
       const authenticatedReq = req as unknown as AuthenticatedRequest;
       const result = authenticatedReq.user;
-      if (!result) {
-        next(new UnauthorizedError('user not found'));
-      }
       ResponseHandler.successResponse(res, result, 'user feteched sucessfully', 200);
     } catch (error) {
+      if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
+        return next(PrismaErrorHandler.handlePrismaError(error));
+      }
       next(error);
     }
   }
@@ -103,6 +123,30 @@ export class AuthController {
     }
   }
 
+  /**
+   * Logs out the authenticated user by invalidating their session.
+   * @param req Express request object (should be AuthenticatedRequest)
+   * @param res Express response object
+   * @param next Express next function for error handling
+   */
+  async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const authenticatedReq = req as unknown as AuthenticatedRequest;
+      const sessionId = authenticatedReq.session?.id;
+
+      if (sessionId) {
+        await this.authService.logout(sessionId);
+      }
+
+      // Clear refresh token cookie
+      res.clearCookie('refreshToken');
+
+      ResponseHandler.successResponse(res, null, 'Logged out successfully', 200);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   googleOauth(req: Request, res: Response, next: NextFunction): void {
     try {
       const googleRedirectURI = this.googleService.getAuthUrl();
@@ -114,10 +158,12 @@ export class AuthController {
   async googleLogin(req: Request, res: Response): Promise<void> {
     try {
       const { code, error } = req.query;
+      console.log(new Date());
+      console.log('google codes', code);
 
       // Handle OAuth errors
       if (error) {
-        return res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_error`);
+        return res.redirect(`${config.frontend_url}/login?error=oauth_error`);
       }
 
       const codeStr =
@@ -127,11 +173,12 @@ export class AuthController {
           ? code[0]
           : undefined;
       if (!codeStr) {
-        return res.redirect(`${process.env.FRONTEND_URL}/login?error=missing_code`);
+        return res.redirect(`${config.frontend_url}/login?error=missing_code`);
       }
       const googleTokens = (await this.googleService.exchangeCodeForTokens(codeStr)) as {
         access_token: string;
       };
+      console.log('tokens', googleTokens);
 
       // Get user info from Google
       const googleUserInfo = await this.googleService.getUserInfo(googleTokens.access_token);
@@ -140,37 +187,38 @@ export class AuthController {
       const user = await this.userService.findOrCreateGoogleUser(
         googleUserInfo as { email: string; id: string; name: string; picture?: string },
       );
+      console.log('saved user', user);
+      // Generate your own tokens
+      const sessionId = randomUUID();
+      const accessToken = generateJwtToken({
+        userId: user.id,
+        email: user.email,
+        sessionId: sessionId,
+      });
 
-      // // Generate your own tokens
-      // const sessionId = randomUUID();
-      // const accessToken = TokenService.generateAccessToken({
-      //   userId: user._id,
-      //   email: user.email,
-      //   sessionId: sessionId,
-      // });
+      const refreshToken = generateJwtToken({
+        sessionId: sessionId,
+        userId: user.id,
+      });
 
-      // const refreshToken = TokenService.generateRefreshToken({
-      //   sessionId: sessionId,
-      //   userId: user._id,
-      // });
+      // Save session in your database
+      await this.userService.createSession({ userId: user.id, sessionId });
 
-      // // Save session in your database
-      // await SessionService.createSession(user._id, refreshToken, accessToken);
+      //Set refresh token in secure cookie
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days0
+      });
 
-      // Set refresh token in secure cookie
-      // res.cookie('refreshToken', refreshToken, {
-      //   httpOnly: true,
-      //   secure: process.env.NODE_ENV === 'production',
-      //   sameSite: 'strict',
-      //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days0
-      // });
+      console.log('');
 
       // // Redirect to frontend with access token
-      // res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${accessToken}`);
-      ResponseHandler.successResponse(res, user);
+      res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${accessToken}`);
     } catch (error) {
       console.error('Google OAuth error:', error);
-      res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_failed`);
+      res.redirect(`${config.frontend_url}/login?error=oauth_failed`);
     }
   }
 }

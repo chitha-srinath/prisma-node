@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "session" ALTER COLUMN "expiresAt" DROP NOT NULL,
+ALTER COLUMN "token" DROP NOT NULL;

@@ -53,15 +53,15 @@ model Log {
 }
 
 model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String
+  id        String    @id
+  expiresAt DateTime?
+  token     String?
   createdAt DateTime
   updatedAt DateTime
   ipAddress String?
   userAgent String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
   @@map("session")

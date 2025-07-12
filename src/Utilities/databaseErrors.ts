@@ -24,8 +24,8 @@ export class PrismaErrorHandler {
    * @param error The error object to handle (can be any Prisma error type)
    * @returns DatabaseError instance with appropriate error message
    */
-  static handlePrismaError(error: unknown): DatabaseError {
-    let errorMessage = 'Unexpected database error';
+  static handlePrismaError(error: unknown): DatabaseError | void {
+    let errorMessage = null;
     let errorDetails = {};
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -78,29 +78,10 @@ export class PrismaErrorHandler {
       if (PrismaErrorHandler.logger) {
         PrismaErrorHandler.logger.error(`Prisma Validation Error: ${error.message}`);
       }
-    } else {
-      // Handle generic errors
-      const genericError = error as Error;
-      errorMessage = 'Unexpected database error';
-      errorDetails = {
-        message: genericError.message,
-        stack: genericError.stack,
-      };
-
-      if (PrismaErrorHandler.logger) {
-        PrismaErrorHandler.logger.error(`Unexpected Database Error: ${genericError.message}`);
-        if (genericError.stack) {
-          PrismaErrorHandler.logger.error(`Stack trace: ${genericError.stack}`);
-        }
-      }
     }
-
-    // Log additional context if logger is available
-    if (PrismaErrorHandler.logger) {
-      PrismaErrorHandler.logger.error(`Database error occurred: ${errorMessage}`);
-      PrismaErrorHandler.logger.error(`Error details: ${JSON.stringify(errorDetails)}`);
+    if (!errorMessage) {
+      return;
     }
-
-    return new DatabaseError('Database error');
+    return new DatabaseError(errorMessage);
   }
 }

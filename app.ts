@@ -6,10 +6,11 @@ import { ErrorMsgEnum } from './src/Enums/Error.enums';
 import helmet from 'helmet';
 import indexRoutes from './src/routes/index.routes';
 import limiter from './src/utils/rate-limit';
-import { toNodeHandler } from 'better-auth/node';
-import { auth } from './auth';
+// import { toNodeHandler } from 'better-auth/node';
+// import { auth } from './auth';
 import { config } from './src/config/config';
 import { PrismaErrorHandler } from './src/Utilities/databaseErrors';
+import cookieParser from 'cookie-parser';
 
 /**
  * Main application class that configures and initializes the Express server.
@@ -55,6 +56,7 @@ export class App {
     this.app.disable('x-powered-by');
     this.app.use(helmet());
     this.app.use(limiter);
+    this.app.use(cookieParser('wgyfwugfuwhfhkw'));
   }
 
   /**
@@ -62,7 +64,7 @@ export class App {
    * Configures the routing structure for the entire application.
    */
   private initializeRoutes(): void {
-    this.app.all('/api/auth/*', toNodeHandler(auth));
+    // this.app.all('/api/auth/*', toNodeHandler(auth));
     this.app.use(express.json());
     this.app.get('/health', (_, res: Response) => {
       res.status(200).json({ status: 'healthy' });

@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import axios from 'axios';
+import { config } from '../../config/config';
 
 // interface GoogleTokenResponse {
 //   access_token: string;
@@ -28,9 +29,9 @@ export class GoogleOAuthService {
   private scope: string;
 
   constructor() {
-    this.clientId = process.env.GOOGLE_CLIENT_ID;
-    this.clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-    this.redirectUri = process.env.GOOGLE_REDIRECT_URI;
+    this.clientId = config.GOOGLE_CLIENT_ID;
+    this.clientSecret = config.GOOGLE_CLIENT_SECRET;
+    this.redirectUri = config.GOOGLE_REDIRECT_URI;
     this.scope = 'openid email profile';
   }
 

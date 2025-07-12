@@ -13,13 +13,31 @@ export const LoginDto = object({
 
 /**
  * Zod schema for user registration validation.
- * Validates email format and password length requirements.
+ * Validates email format, password length requirements, and name.
  */
 export const RegisterDto = object({
+  name: string().min(1, { message: 'Name is required' }),
   email: string().email({ message: 'Enter valid email' }),
   password: string()
     .min(6, { message: 'Password length should be minimum of 6 characters' })
     .max(64, { message: 'Password length should be maximum of 64 characters' }),
+}).strict();
+
+/**
+ * Zod schema for authentication response.
+ * Contains user info and access token.
+ */
+export const AuthResponseDto = object({
+  user: object({
+    id: string(),
+    name: string(),
+    email: string(),
+    emailVerified: z.boolean().nullable(),
+    image: string().nullable(),
+    isActive: z.boolean(),
+  }),
+  accessToken: string(),
+  refreshToken: string(),
 }).strict();
 
 /**
@@ -33,3 +51,9 @@ export type LoginPostDto = z.infer<typeof LoginDto>;
  * Inferred from RegisterDto schema for type safety.
  */
 export type RegisterPostDto = z.infer<typeof RegisterDto>;
+
+/**
+ * TypeScript type for authentication response data.
+ * Inferred from AuthResponseDto schema for type safety.
+ */
+export type AuthResponse = z.infer<typeof AuthResponseDto>;

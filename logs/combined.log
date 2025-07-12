@@ -1,0 +1,288 @@
+2025-07-07T16:01:27.003Z [ERROR]: Bad request
+2025-07-07T16:01:27.426Z [ERROR]: Bad request
+2025-07-07T16:01:31.455Z [ERROR]: Bad request
+2025-07-08T07:58:01.263Z [ERROR]: Bad request
+2025-07-08T07:58:11.660Z [ERROR]: Bad request
+2025-07-08T07:58:11.862Z [ERROR]: Bad request
+2025-07-08T08:52:52.461Z [ERROR]: Bad request
+2025-07-08T08:52:52.745Z [ERROR]: Bad request
+2025-07-08T08:54:30.450Z [ERROR]: Bad request
+2025-07-08T08:54:33.174Z [ERROR]: Bad request
+2025-07-08T08:54:33.250Z [ERROR]: Bad request
+2025-07-08T08:54:33.474Z [ERROR]: Bad request
+2025-07-08T08:54:39.589Z [ERROR]: Bad request
+2025-07-08T08:54:39.734Z [ERROR]: Bad request
+2025-07-08T08:54:40.011Z [ERROR]: Bad request
+2025-07-12T07:04:29.558Z [ERROR]: user not found
+2025-07-12T07:05:43.196Z [ERROR]: Bad request
+2025-07-12T07:05:57.025Z [ERROR]: Bad request
+2025-07-12T07:06:28.723Z [ERROR]: Bad request
+2025-07-12T07:07:08.477Z [ERROR]: Bad request
+2025-07-12T07:07:59.482Z [ERROR]: Bad request
+2025-07-12T07:29:51.992Z [ERROR]: Bad request
+2025-07-12T07:30:54.548Z [ERROR]: Bad request
+2025-07-12T07:41:54.204Z [ERROR]: Bad request
+2025-07-12T07:43:05.104Z [ERROR]: Bad request
+2025-07-12T07:43:48.028Z [ERROR]: Bad request
+2025-07-12T07:54:33.656Z [ERROR]: Bad request
+2025-07-12T07:55:24.877Z [ERROR]: 
+Invalid `this.getModel().create()` invocation in
+C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\repositories\user.repositiory.ts:59:28
+
+  56  * @returns Created user
+  57  */
+  58 async createUser(data: Prisma.UserCreateInput): Promise<User> {
+→ 59   return this.getModel().create({
+         data: {
+           email: "one@gmail.com",
+           isActive: true,
+           emailVerified: false,
+       +   name: String
+         }
+       })
+
+Argument `name` is missing.
+2025-07-12T08:45:58.720Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:45:58.726Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:45:58.728Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:45:58.729Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:45:58.730Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:45:58.731Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:45:58.732Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:45:58.732Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:45:58.735Z [ERROR]: Database error
+2025-07-12T08:48:31.513Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:48:31.524Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:48:31.525Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:48:31.527Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:48:31.528Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:48:31.529Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:48:31.530Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:48:31.531Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:48:31.535Z [ERROR]: Database error
+2025-07-12T08:48:50.768Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:48:50.769Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:48:50.770Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:48:50.770Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:48:50.771Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:48:50.771Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:48:50.772Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:48:50.772Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:48:50.773Z [ERROR]: Database error
+2025-07-12T08:50:00.655Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:50:00.660Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:50:00.660Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:50:00.661Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:50:00.662Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:50:00.663Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:50:00.664Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:50:00.665Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:50:00.668Z [ERROR]: Database error
+2025-07-12T08:50:06.279Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:50:06.281Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:50:06.282Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:50:06.282Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:50:06.283Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:50:06.284Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:50:06.285Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:50:06.286Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:50:06.293Z [ERROR]: Database error
+2025-07-12T08:50:17.603Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:50:17.604Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:50:17.605Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:50:17.606Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:50:17.606Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:50:17.607Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:50:17.607Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:50:17.608Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:50:17.610Z [ERROR]: Database error
+2025-07-12T08:50:19.187Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:50:19.188Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:50:19.189Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:50:19.189Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:50:19.190Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:50:19.190Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:50:19.191Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:50:19.191Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:50:19.196Z [ERROR]: Database error
+2025-07-12T08:50:35.175Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:50:35.179Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:50:35.180Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:50:35.181Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:50:35.184Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:50:35.186Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:50:35.189Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:50:35.190Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:50:35.192Z [ERROR]: Database error
+2025-07-12T08:52:18.701Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:52:18.706Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:52:18.708Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:52:18.710Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:52:18.711Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:52:18.712Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:52:18.712Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:52:18.713Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:52:18.718Z [ERROR]: Database error
+2025-07-12T08:52:20.370Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:52:20.372Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:52:20.374Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:52:20.376Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:52:20.378Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:52:20.379Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:52:20.380Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:52:20.382Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:52:20.387Z [ERROR]: Database error
+2025-07-12T08:52:37.141Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:52:37.142Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:52:37.143Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:52:37.144Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:52:37.145Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:52:37.147Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:52:37.150Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:52:37.151Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:52:37.154Z [ERROR]: Database error
+2025-07-12T08:53:46.364Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:53:46.369Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:53:46.370Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:53:46.371Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:53:46.375Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:53:46.378Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:53:46.380Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:53:46.381Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:53:46.385Z [ERROR]: Database error
+2025-07-12T08:54:16.805Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:54:16.806Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:54:16.807Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:54:16.807Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:54:16.808Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:54:16.809Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:54:16.809Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:54:16.809Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:54:16.811Z [ERROR]: Database error
+2025-07-12T08:54:28.529Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:54:28.532Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:54:28.533Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:54:28.535Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:54:28.535Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:54:28.536Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:54:28.537Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:54:28.542Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:54:28.544Z [ERROR]: Database error
+2025-07-12T08:54:29.692Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:54:29.693Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:54:29.694Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:54:29.695Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:54:29.695Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:54:29.696Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:54:29.697Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:54:29.698Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:54:29.699Z [ERROR]: Database error
+2025-07-12T08:54:30.615Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:54:30.616Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:54:30.617Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:54:30.618Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:54:30.618Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:54:30.619Z [ERROR]: Stack trace: UNAUTHORIZED: Invalid email or password
+    at AuthService.signIn (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\Authentication\Auth.service.ts:33:13)
+    at async AuthController.login (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\auth.controller.ts:42:22)
+2025-07-12T08:54:30.619Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T08:54:30.620Z [ERROR]: Error details: {"message":"Invalid email or password","stack":"UNAUTHORIZED: Invalid email or password\n    at AuthService.signIn (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\Authentication\\Auth.service.ts:33:13)\n    at async AuthController.login (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\auth.controller.ts:42:22)"}
+2025-07-12T08:54:30.625Z [ERROR]: Database error
+2025-07-12T08:55:32.448Z [ERROR]: Unexpected Database Error: Invalid email or password
+2025-07-12T08:57:55.469Z [ERROR]: Unexpected database error
+2025-07-12T08:59:59.752Z [ERROR]: Invalid email or password
+2025-07-12T09:00:23.669Z [ERROR]: Invalid email or password
+2025-07-12T11:44:09.115Z [ERROR]: Post not found
+2025-07-12T11:45:50.269Z [ERROR]: Invalid email or password
+2025-07-12T11:46:39.214Z [ERROR]: Invalid email or password
+2025-07-12T11:46:59.345Z [ERROR]: Invalid email or password
+2025-07-12T11:48:45.400Z [ERROR]: Invalid email or password
+2025-07-12T12:36:54.425Z [ERROR]: Unexpected Database Error: Post not found
+2025-07-12T12:36:54.430Z [ERROR]: Stack trace: NOT_FOUND: Post not found
+    at PostService.updatepost (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\post.service.ts:68:13)
+    at async PostController.updatepost (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\post.contoller.ts:88:20)
+2025-07-12T12:36:54.431Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T12:36:54.432Z [ERROR]: Error details: {"message":"Post not found","stack":"NOT_FOUND: Post not found\n    at PostService.updatepost (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\post.service.ts:68:13)\n    at async PostController.updatepost (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\post.contoller.ts:88:20)"}
+2025-07-12T12:36:54.433Z [ERROR]: Unexpected Database Error: Post not found
+2025-07-12T12:36:54.433Z [ERROR]: Stack trace: NOT_FOUND: Post not found
+    at PostService.updatepost (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\post.service.ts:68:13)
+    at async PostController.updatepost (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\post.contoller.ts:88:20)
+2025-07-12T12:36:54.433Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T12:36:54.434Z [ERROR]: Error details: {"message":"Post not found","stack":"NOT_FOUND: Post not found\n    at PostService.updatepost (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\post.service.ts:68:13)\n    at async PostController.updatepost (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\post.contoller.ts:88:20)"}
+2025-07-12T12:36:54.435Z [ERROR]: Database error
+2025-07-12T12:36:59.604Z [ERROR]: Unexpected Database Error: Post not found
+2025-07-12T12:36:59.605Z [ERROR]: Stack trace: NOT_FOUND: Post not found
+    at PostService.updatepost (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\post.service.ts:68:13)
+    at async PostController.updatepost (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\post.contoller.ts:88:20)
+2025-07-12T12:36:59.605Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T12:36:59.606Z [ERROR]: Error details: {"message":"Post not found","stack":"NOT_FOUND: Post not found\n    at PostService.updatepost (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\post.service.ts:68:13)\n    at async PostController.updatepost (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\post.contoller.ts:88:20)"}
+2025-07-12T12:36:59.607Z [ERROR]: Unexpected Database Error: Post not found
+2025-07-12T12:36:59.607Z [ERROR]: Stack trace: NOT_FOUND: Post not found
+    at PostService.updatepost (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\services\post.service.ts:68:13)
+    at async PostController.updatepost (C:\sai\code practice\NodeJS\node-prisma\prisma-node\src\Controllers\post.contoller.ts:88:20)
+2025-07-12T12:36:59.608Z [ERROR]: Database error occurred: Unexpected database error
+2025-07-12T12:36:59.608Z [ERROR]: Error details: {"message":"Post not found","stack":"NOT_FOUND: Post not found\n    at PostService.updatepost (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\services\\post.service.ts:68:13)\n    at async PostController.updatepost (C:\\sai\\code practice\\NodeJS\\node-prisma\\prisma-node\\src\\Controllers\\post.contoller.ts:88:20)"}
+2025-07-12T12:36:59.610Z [ERROR]: Database error
+2025-07-12T12:37:12.136Z [ERROR]: Post not found

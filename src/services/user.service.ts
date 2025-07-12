@@ -1,5 +1,9 @@
 import { CreateUserData, UpdateUserData } from '@/Dtos/user.dto';
-import { UserRepository, AccountRespository } from '../repositories/user.repositiory';
+import {
+  UserRepository,
+  AccountRespository,
+  SessionRepository,
+} from '../repositories/user.repositiory';
 import { User } from '@prisma/client';
 import { NotFoundError } from '../Utilities/ErrorUtility';
 
@@ -11,6 +15,7 @@ import { NotFoundError } from '../Utilities/ErrorUtility';
 export class UserService {
   private userRepository: UserRepository;
   private accountRepository: AccountRespository;
+  private sessionRepository: SessionRepository;
 
   /**
    * Initializes the UserService and its UserRepository dependency.
@@ -18,6 +23,7 @@ export class UserService {
   constructor() {
     this.userRepository = new UserRepository();
     this.accountRepository = new AccountRespository();
+    this.sessionRepository = new SessionRepository();
   }
 
   /**
@@ -129,5 +135,14 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async createSession(payload: { userId: string; sessionId: string }): Promise<void> {
+    await this.sessionRepository.insert({
+      id: payload.sessionId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      user: { connect: { id: payload.userId } },
+    });
   }
 }

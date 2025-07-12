@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 
 import { GlobalErrorHandler } from './GlobalErrorHandler';
 import { AuthenticatedRequest } from '../interface/modified-request';
-import { UnauthorizedError } from '@/Utilities/ErrorUtility';
-import { verifyJwtToken } from '@/Utilities/encrypt-hash';
-import { ErrorMessages } from '@/constants/error-messages.constatnts';
+import { UnauthorizedError } from '../Utilities/ErrorUtility';
+import { verifyJwtToken } from '../Utilities/encrypt-hash';
+import { ErrorMessages } from '../constants/error-messages.constatnts';
 import { ResponseHandler } from './ResponseHandler';
 
 /**
