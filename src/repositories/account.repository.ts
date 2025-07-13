@@ -66,4 +66,31 @@ export class AccountRepository extends BaseRepository<
       },
     });
   }
+
+  async createAccount({
+    userId,
+    providerId,
+    accountId,
+    password,
+    extraData = {},
+  }: {
+    userId: string;
+    providerId: string;
+    accountId: string;
+    password?: string;
+    extraData?: Record<string, unknown>;
+  }): Promise<Account> {
+    return this.getModel().create({
+      data: {
+        id: randomUUID(),
+        userId,
+        providerId,
+        accountId,
+        password,
+        ...extraData,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+  }
 }

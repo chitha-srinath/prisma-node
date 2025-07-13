@@ -1,11 +1,8 @@
 import { CreateUserData, UpdateUserData } from '@/Dtos/user.dto';
-import {
-  UserRepository,
-  AccountRespository,
-  SessionRepository,
-} from '../repositories/user.repositiory';
+import { UserRepository, SessionRepository } from '../repositories/user.repositiory';
 import { User } from '@prisma/client';
 import { NotFoundError } from '../Utilities/ErrorUtility';
+import { AccountRepository } from '../repositories/account.repository';
 
 /**
  * Service for user-related business logic.
@@ -14,7 +11,7 @@ import { NotFoundError } from '../Utilities/ErrorUtility';
  */
 export class UserService {
   private userRepository: UserRepository;
-  private accountRepository: AccountRespository;
+  private accountRepository: AccountRepository;
   private sessionRepository: SessionRepository;
 
   /**
@@ -22,7 +19,7 @@ export class UserService {
    */
   constructor() {
     this.userRepository = new UserRepository();
-    this.accountRepository = new AccountRespository();
+    this.accountRepository = new AccountRepository();
     this.sessionRepository = new SessionRepository();
   }
 
@@ -104,36 +101,42 @@ export class UserService {
         image: googleUserInfo.picture,
         createdAt: new Date(),
       });
-    } else if (!user.emailVerified) {
-      // Optionally update emailVerified and image if not set
-      user = await this.userRepository.update(
-        { id: String(user.id) },
-        {
-          emailVerified: true,
-          image: googleUserInfo.picture,
-        },
-      );
-    }
-
-    // Add or update Account for Google provider
-    const providerId = 'google';
-    const accountId = googleUserInfo.id;
-    const existingAccount = await this.accountRepository.findFirst({
-      providerId,
-      accountId,
-      userId: user.id,
-    });
-    if (!existingAccount) {
+      // Create Google account for new user
       await this.accountRepository.insert({
-        id: accountId, // assuming Google ID is unique
-        accountId,
-        providerId,
+        id: googleUserInfo.id, // assuming Google ID is unique
+        accountId: googleUserInfo.id,
+        providerId: 'google',
         createdAt: new Date(),
         updatedAt: new Date(),
         user: { connect: { id: user.id } },
       });
+      return user;
     }
 
+    // User exists, check for existing Google account
+    const googleAccount = await this.accountRepository.findFirst({
+      userId: user.id,
+      providerId: 'google',
+    });
+    if (googleAccount) {
+      // User already has a Google account, return user
+      return user;
+    }
+    // Check if user has any other account (non-Google)
+    const otherAccount = await this.accountRepository.findFirst({ userId: user.id });
+    if (otherAccount) {
+      // User has another provider, throw error
+      throw new Error('User is already signed up with another provider');
+    }
+    // No Google account, no other provider, create Google account
+    await this.accountRepository.insert({
+      id: googleUserInfo.id, // assuming Google ID is unique
+      accountId: googleUserInfo.id,
+      providerId: 'google',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      user: { connect: { id: user.id } },
+    });
     return user;
   }
 
@@ -144,5 +147,58 @@ export class UserService {
       updatedAt: new Date(),
       user: { connect: { id: payload.userId } },
     });
+  }
+
+  // src/services/user.service.ts
+  async findOrCreateUserWithProvider({
+    providerId,
+    accountId,
+    email,
+    name,
+    image,
+    password,
+    extraData = {},
+  }: {
+    providerId: string;
+    accountId: string;
+    email: string;
+    name: string;
+    image?: string;
+    password?: string;
+    extraData?: Record<string, unknown>;
+  }): Promise<User> {
+    let user = email ? await this.userRepository.findFirst({ email }) : null;
+
+    if (!user) {
+      user = await this.userRepository.insert({
+        email,
+        name,
+        image,
+        emailVerified: providerId !== 'credentials',
+        createdAt: new Date(),
+      });
+    }
+
+    // Check if account already exists
+    const account = await this.accountRepository.findFirst({
+      userId: user.id,
+      providerId,
+    });
+
+    if (!account) {
+      await this.accountRepository.createAccount({
+        userId: user.id,
+        providerId,
+        accountId,
+        password,
+        extraData,
+      });
+    } else {
+      if (account.providerId !== providerId) {
+        throw new Error('User is already signed up with another provider');
+      }
+    }
+
+    return user;
   }
 }

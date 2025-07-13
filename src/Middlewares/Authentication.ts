@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { GlobalErrorHandler } from './GlobalErrorHandler';
-import { AuthenticatedRequest } from '../interface/modified-request';
+import { AuthenticatedRequest, UserDetails } from '../interface/modified-request';
 import { UnauthorizedError } from '../Utilities/ErrorUtility';
 import { verifyJwtToken } from '../Utilities/encrypt-hash';
 import { ErrorMessages } from '../constants/error-messages.constatnts';
@@ -41,8 +41,13 @@ export const requireAuth = async (
       return next(new UnauthorizedError('Invalid authentication'));
     }
 
-    // Attach user/session to request if present in payload
-    (req as unknown as AuthenticatedRequest).user = payload.user;
+    const userData: UserDetails = {
+      username: payload.userId,
+      id: payload.userId,
+      avatarUrl: '',
+      email: payload.email,
+    };
+    (req as unknown as AuthenticatedRequest).user = userData;
     (req as unknown as AuthenticatedRequest).session = payload.session;
 
     next();

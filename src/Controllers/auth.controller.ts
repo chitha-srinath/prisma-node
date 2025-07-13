@@ -11,6 +11,7 @@ import { UserService } from '../services/user.service';
 import { config } from '../config/config';
 import { generateJwtToken } from '../Utilities/encrypt-hash';
 import { randomUUID } from 'node:crypto';
+import { RefreshToken } from '../constants/regular.constants';
 
 // import { randomUUID } from 'crypto';
 
@@ -42,7 +43,7 @@ export class AuthController {
       const result = await this.authService.signIn(req.body as unknown as LoginPostDto);
 
       //Set refresh token in secure cookie
-      res.cookie('refresh-token', result.refreshToken, {
+      res.cookie(RefreshToken, result.refreshToken, {
         signed: true,
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -90,6 +91,7 @@ export class AuthController {
     try {
       const authenticatedReq = req as unknown as AuthenticatedRequest;
       const result = authenticatedReq.user;
+      console.log('user result from api', result);
       ResponseHandler.successResponse(res, result, 'user feteched sucessfully', 200);
     } catch (error) {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
@@ -139,7 +141,7 @@ export class AuthController {
       }
 
       // Clear refresh token cookie
-      res.clearCookie('refreshToken');
+      res.clearCookie(RefreshToken);
 
       ResponseHandler.successResponse(res, null, 'Logged out successfully', 200);
     } catch (error) {
@@ -205,7 +207,7 @@ export class AuthController {
       await this.userService.createSession({ userId: user.id, sessionId });
 
       //Set refresh token in secure cookie
-      res.cookie('refreshToken', refreshToken, {
+      res.cookie(RefreshToken, refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',

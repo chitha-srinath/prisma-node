@@ -1,6 +1,5 @@
-import { User, PrismaClient, Prisma, Session, Account } from '@prisma/client';
+import { User, PrismaClient, Prisma, Session } from '@prisma/client';
 import { BaseRepository } from './baserepostiory';
-
 /**
  * Repository for User entity operations.
  * Extends BaseRepository to provide type-safe database operations for User model.
@@ -57,27 +56,6 @@ export class UserRepository extends BaseRepository<
    */
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
     return this.getModel().create({ data });
-  }
-}
-
-export class AccountRespository extends BaseRepository<
-  User,
-  Prisma.AccountCreateInput,
-  Prisma.AccountUpdateInput,
-  Prisma.AccountWhereInput,
-  Prisma.AccountWhereUniqueInput,
-  PrismaClient['account']
-> {
-  /**
-   * Initializes the UserRepository with Prisma user model.
-   * Sets up the repository to work with the User entity in the database.
-   */
-  constructor() {
-    super((prisma: PrismaClient) => prisma.account);
-  }
-
-  async findFirst(where: Prisma.AccountWhereInput): Promise<Account | null> {
-    return this.getModel().findFirst({ where });
   }
 }
 
