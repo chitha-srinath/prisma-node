@@ -90,7 +90,6 @@ export class AuthController {
   async fetchUserResult(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const result = UserContext.getUser();
-      console.log('user result from api', result);
       ResponseHandler.successResponse(res, result, 'user feteched sucessfully', 200);
     } catch (error) {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
@@ -159,8 +158,6 @@ export class AuthController {
   async googleLogin(req: Request, res: Response): Promise<void> {
     try {
       const { code, error } = req.query;
-      console.log(new Date());
-      console.log('google codes', code);
 
       // Handle OAuth errors
       if (error) {
@@ -179,7 +176,6 @@ export class AuthController {
       const googleTokens = (await this.googleService.exchangeCodeForTokens(codeStr)) as {
         access_token: string;
       };
-      console.log('tokens', googleTokens);
 
       // Get user info from Google
       const googleUserInfo = await this.googleService.getUserInfo(googleTokens.access_token);
@@ -188,7 +184,7 @@ export class AuthController {
       const user = await this.userService.findOrCreateGoogleUser(
         googleUserInfo as { email: string; id: string; name: string; picture?: string },
       );
-      console.log('saved user', user);
+
       // Generate your own tokens
       const sessionId = randomUUID();
       const accessToken = generateJwtToken({
@@ -213,12 +209,9 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days0
       });
 
-      console.log('');
-
       // // Redirect to frontend with access token
       res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${accessToken}`);
     } catch (error) {
-      console.error('Google OAuth error:', error);
       res.redirect(`${config.frontend_url}/login?error=oauth_failed`);
     }
   }
