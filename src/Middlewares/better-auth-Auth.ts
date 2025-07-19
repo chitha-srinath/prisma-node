@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { auth } from '../../auth';
 import { GlobalErrorHandler } from './GlobalErrorHandler';
-import { AuthenticatedRequest, UserSession } from '../interface/modified-request';
+import { UserContext } from '../Utilities/user-context';
 
 /**
  * Middleware that validates authentication using better-auth library.
@@ -34,13 +34,14 @@ export const requireAuth = async (
       });
     }
 
-    (req as unknown as AuthenticatedRequest).user = {
+    // Set user and session in AsyncLocalStorage context
+    UserContext.setUser({
       id: session.user.id,
       username: session.user.name,
       email: session.user.email,
       avatarUrl: session.user.image || '',
-    };
-    (req as unknown as AuthenticatedRequest).session = session.session as UserSession;
+    });
+    UserContext.setSession(session.session);
     next();
   } catch (error) {
     GlobalErrorHandler.logger.error(

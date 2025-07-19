@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-
 import { GlobalErrorHandler } from './GlobalErrorHandler';
-import { AuthenticatedRequest, UserDetails } from '../interface/modified-request';
+import { UserDetails } from '../interface/user.interface';
 import { UnauthorizedError } from '../Utilities/ErrorUtility';
 import { verifyJwtToken } from '../Utilities/encrypt-hash';
 import { ErrorMessages } from '../constants/error-messages.constatnts';
 import { ResponseHandler } from './ResponseHandler';
+import { UserContext } from '../Utilities/user-context';
 
 /**
  * Middleware that validates JWT authentication tokens.
@@ -47,10 +47,11 @@ export const requireAuth = async (
       avatarUrl: '',
       email: payload.email,
     };
-    (req as unknown as AuthenticatedRequest).user = userData;
-    (req as unknown as AuthenticatedRequest).session = payload.session;
 
-    next();
+    // Use AsyncLocalStorage to store user context for this request
+    UserContext.run({ user: userData, session: payload.session }, () => {
+      next();
+    });
   } catch (error) {
     GlobalErrorHandler.logger.error(
       `Auth middleware error: ${error instanceof Error ? error.message : 'Unknown error'}`,

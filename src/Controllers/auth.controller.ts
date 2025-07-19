@@ -5,13 +5,13 @@ import { PrismaErrorHandler } from '../Utilities/databaseErrors';
 import { SuccessMessages } from '../constants/success-messages.constants';
 import { LoginPostDto, RegisterPostDto } from '@/Dtos/auth.dto';
 import { AuthService } from '../services/Authentication/Auth.service';
-import { AuthenticatedRequest } from '@/interface/modified-request';
 import { GoogleOAuthService } from '../services/Authentication/google.auth';
 import { UserService } from '../services/user.service';
 import { config } from '../config/config';
 import { generateJwtToken } from '../Utilities/encrypt-hash';
 import { randomUUID } from 'node:crypto';
 import { RefreshToken } from '../constants/regular.constants';
+import { UserContext } from '../Utilities/user-context';
 
 // import { randomUUID } from 'crypto';
 
@@ -89,8 +89,7 @@ export class AuthController {
    */
   async fetchUserResult(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const authenticatedReq = req as unknown as AuthenticatedRequest;
-      const result = authenticatedReq.user;
+      const result = UserContext.getUser();
       console.log('user result from api', result);
       ResponseHandler.successResponse(res, result, 'user feteched sucessfully', 200);
     } catch (error) {
@@ -133,8 +132,8 @@ export class AuthController {
    */
   async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const authenticatedReq = req as unknown as AuthenticatedRequest;
-      const sessionId = authenticatedReq.session?.id;
+      const session = UserContext.getSession();
+      const sessionId = session?.id;
 
       if (sessionId) {
         await this.authService.logout(sessionId);
