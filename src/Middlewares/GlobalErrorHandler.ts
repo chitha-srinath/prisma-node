@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { ResponseHandler } from '../middlewares/ResponseHandler';
+import { Request, Response } from 'express';
+import { ResponseHandler } from '../Utilities/ResponseHandler';
 import { PrismaClient } from '@prisma/client';
 import { LoggerUtility } from '../Utilities/LoggerUtility';
 import { prismaConnection } from '../utils/database';
@@ -20,12 +20,7 @@ export class GlobalErrorHandler {
    * @param res Express response object
    * @param _next Express next function (unused in error handlers)
    */
-  static handleErrors(
-    err: Error & { status?: number },
-    req: Request,
-    res: Response,
-    _next: NextFunction,
-  ): void {
+  static handleErrors(err: Error & { status?: number }, req: Request, res: Response): void {
     const statusCode = err.status || 500;
     const message = err.message || 'Internal Server Error';
     GlobalErrorHandler.logger.error(message);

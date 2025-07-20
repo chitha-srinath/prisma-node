@@ -4,7 +4,7 @@ import { UserDetails } from '../interface/user.interface';
 import { UnauthorizedError } from '../Utilities/ErrorUtility';
 import { verifyJwtToken } from '../Utilities/encrypt-hash';
 import { ErrorMessages } from '../constants/error-messages.constatnts';
-import { ResponseHandler } from './ResponseHandler';
+import { ResponseHandler } from '../Utilities/ResponseHandler';
 import { UserContext } from '../Utilities/user-context';
 
 /**

@@ -15,20 +15,19 @@ type ValidationType = 'body' | 'query' | 'params';
  * @param type The part of the request to validate (body, query, or params)
  * @returns Express middleware function that validates the request
  */
-export function validatePayload<T>(
-  schema: ZodSchema<T>,
-  type: ValidationType = 'body',
-): (req: Request, res: Response, next: NextFunction) => void {
-  return (req: Request, res: Response, next: NextFunction) => {
+export function validatePayload<T>(schema: ZodSchema<T>, type: ValidationType = 'body') {
+  return (req: Request, _res: Response, next: NextFunction): void => {
     try {
       schema.parse(req[type]);
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const firstError = error.errors[0];
-        const errorMessage = firstError?.message || 'Validation failed';
-        const fieldName = firstError?.path?.[0] || 'unknown field';
-        next(new PayloadError(`${errorMessage} for ${fieldName}`));
+        const issue = error.issues[0];
+        next(
+          new PayloadError(
+            `${issue?.message || 'Validation failed'} for ${issue?.path?.[0] !== undefined ? String(issue.path[0]) : 'field'}`,
+          ),
+        );
       } else {
         next(error);
       }

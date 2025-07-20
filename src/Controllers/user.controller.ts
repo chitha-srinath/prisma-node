@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { DatabaseError, NotFoundError } from '../Utilities/ErrorUtility';
-import { ResponseHandler } from '../middlewares/ResponseHandler';
+import { ResponseHandler } from '../Utilities/ResponseHandler';
 import { PrismaErrorHandler } from '../Utilities/databaseErrors';
 import { UserService } from '../services/user.service';
 import { SuccessMessages } from '../constants/success-messages.constants';

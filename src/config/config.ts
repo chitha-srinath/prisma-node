@@ -9,6 +9,7 @@ const requiredEnvVars = [
   'DATABASE_URL',
   'JWT_ACCESS_SECRET',
   'JWT_REFRESH_SECRET',
+  'NODE_ENV',
 ] as const;
 
 /**
@@ -34,6 +35,7 @@ export const config = {
   GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI,
   GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+  NODE_ENV: process.env.NODE_ENV,
   jwt: {
     accessSecret: process.env.JWT_ACCESS_SECRET,
     refreshSecret: process.env.JWT_REFRESH_SECRET,

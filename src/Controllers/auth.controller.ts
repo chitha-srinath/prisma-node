@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { DatabaseError, UnauthorizedError } from '../Utilities/ErrorUtility';
-import { ResponseHandler } from '../middlewares/ResponseHandler';
+import { ResponseHandler } from '../Utilities/ResponseHandler';
 import { PrismaErrorHandler } from '../Utilities/databaseErrors';
 import { SuccessMessages } from '../constants/success-messages.constants';
 import { LoginPostDto, RegisterPostDto } from '@/Dtos/auth.dto';
@@ -46,7 +46,7 @@ export class AuthController {
       res.cookie(RefreshToken, result.refreshToken, {
         signed: true,
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: config.NODE_ENV === 'production',
         path: '/',
         sameSite: 'strict',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days0
@@ -168,8 +168,9 @@ export class AuthController {
         typeof code === 'string'
           ? code
           : Array.isArray(code) && typeof code[0] === 'string'
-          ? code[0]
-          : undefined;
+            ? code[0]
+            : undefined;
+
       if (!codeStr) {
         return res.redirect(`${config.frontend_url}/login?error=missing_code`);
       }
@@ -204,14 +205,15 @@ export class AuthController {
       //Set refresh token in secure cookie
       res.cookie(RefreshToken, refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: config.NODE_ENV === 'production',
         sameSite: 'strict',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days0
       });
 
       // // Redirect to frontend with access token
-      res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${accessToken}`);
+      res.redirect(`${config.frontend_url}/dashboard?token=${accessToken}`);
     } catch (error) {
+      console.error(error);
       res.redirect(`${config.frontend_url}/login?error=oauth_failed`);
     }
   }
