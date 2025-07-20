@@ -66,7 +66,7 @@ export class App {
   private initializeRoutes(): void {
     // this.app.all('/api/auth/*', toNodeHandler(auth));
     this.app.use(express.json());
-    this.app.get('/health', (_, res: Response) => {
+    this.app.get('/health', (res: Response) => {
       res.status(200).json({ status: 'healthy' });
     });
     this.app.use('/api', indexRoutes);
@@ -77,7 +77,7 @@ export class App {
    * Sets up catch-all route for 404 errors and global error handler.
    */
   private initializeErrorHandling(): void {
-    this.app.use('*', (_, res: Response, next: NextFunction) => {
+    this.app.use((next: NextFunction) => {
       next(new BadRequestError(ErrorMsgEnum.BAD_REQUEST));
     });
     this.app.use(GlobalErrorHandler.handleErrors);

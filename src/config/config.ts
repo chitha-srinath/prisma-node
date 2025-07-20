@@ -9,8 +9,8 @@ const envSchema = z.object({
   // Required core variables
   PORT: z.coerce.number().min(1).max(65535),
   DATABASE_URL: z.string().url(),
-  JWT_ACCESS_SECRET: z.string().min(32, 'JWT access secret must be at least 32 characters'),
-  JWT_REFRESH_SECRET: z.string().min(32, 'JWT refresh secret must be at least 32 characters'),
+  JWT_ACCESS_SECRET: z.string().min(16, 'JWT access secret must be at least 16 characters'),
+  JWT_REFRESH_SECRET: z.string().min(16, 'JWT refresh secret must be at least 16 characters'),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
   // Optional variables with defaults
