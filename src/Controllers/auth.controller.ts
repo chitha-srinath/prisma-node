@@ -44,12 +44,11 @@ export class AuthController {
 
       //Set refresh token in secure cookie
       res.cookie(RefreshToken, result.refreshToken, {
-        signed: true,
         httpOnly: true,
-        secure: config.NODE_ENV === 'production',
-        path: '/',
-        sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days0
+        secure: false, // must be true in production
+        sameSite: 'none',
+        // path: '/api/auth/access-token', // or "/api/auth" if you need it for multiple auth endpoints
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
       ResponseHandler.successResponse(
@@ -110,7 +109,8 @@ export class AuthController {
       const token = req?.cookies?.refreshToken as string;
 
       if (!token) {
-        next(new UnauthorizedError('token not found'));
+        next(new UnauthorizedError('no refresh token provided'));
+        return;
       }
       const result = await this.authService.fetchAcessToken(token);
 
@@ -139,7 +139,14 @@ export class AuthController {
       }
 
       // Clear refresh token cookie
-      res.clearCookie(RefreshToken);
+      res.clearCookie(RefreshToken, {
+        httpOnly: true,
+        secure: false, // must be true in production
+        sameSite: 'none',
+        // path: '/api/auth/access-token',
+        maxAge: 0,
+        expires: new Date(Date.now()),
+      });
 
       ResponseHandler.successResponse(res, null, 'Logged out successfully', 200);
     } catch (error) {
@@ -205,9 +212,10 @@ export class AuthController {
       //Set refresh token in secure cookie
       res.cookie(RefreshToken, refreshToken, {
         httpOnly: true,
-        secure: config.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: false,
+        sameSite: 'none',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days0
+        // path: '/api/auth/access-token', // only sent with this exact endpoint
       });
 
       // // Redirect to frontend with access token
