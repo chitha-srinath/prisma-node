@@ -3,6 +3,7 @@ import { UserController } from '../Controllers/user.controller';
 import { validatePayload } from '../middlewares/Payload-verify';
 import { createUserDto } from '../Dtos/user.dto';
 import { PayLoadType } from '../Enums/payload.enum';
+import { requireAuth } from '@/middlewares/Authentication';
 
 /**
  * Router for user-related endpoints.
@@ -35,6 +36,11 @@ export class UserRoutes {
     this.router.get('/:id', this.userController.getuserById.bind(this.userController));
     this.router.put('/:id', this.userController.updateuser.bind(this.userController));
     this.router.delete('/:id', this.userController.deleteuser.bind(this.userController));
+    this.router.post(
+      '/change-password',
+      requireAuth,
+      this.userController.changePassword.bind(this.userController),
+    );
   }
 
   /**

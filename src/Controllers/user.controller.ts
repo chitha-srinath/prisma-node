@@ -5,6 +5,7 @@ import { PrismaErrorHandler } from '../Utilities/databaseErrors';
 import { UserService } from '../services/user.service';
 import { SuccessMessages } from '../constants/success-messages.constants';
 import { ErrorMessages } from '../constants/error-messages.constatnts';
+import { UserContext } from '@/Utilities/user-context';
 
 /**
  * Controller for user-related endpoints.
@@ -109,6 +110,20 @@ export class UserController {
       const id = req.params.id;
       await this.userService.deleteuser(Number(id));
       res.sendStatus(204);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async changePassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { oldPassword, newPassword } = req.body;
+      const user = UserContext.getUser();
+      if (!user?.id) {
+        return next(new NotFoundError(ErrorMessages.USER.USER_NOT_FOUND));
+      }
+      await this.userService.changePassword(user.id, oldPassword, newPassword);
+      ResponseHandler.successResponse(res, null, 'Password changed successfully', 200);
     } catch (error) {
       next(error);
     }

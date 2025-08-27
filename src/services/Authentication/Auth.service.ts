@@ -1,7 +1,7 @@
 import { LoginPostDto, RegisterPostDto } from '../../Dtos/auth.dto';
 import { hashPassword, verifyPassword, generateJwtToken } from '../../Utilities/encrypt-hash';
 import { UnauthorizedError, BadRequestError } from '../../Utilities/ErrorUtility';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, randomInt } from 'node:crypto';
 import { UserRepository } from '../../repositories/user.repositiory';
 import { AccountRepository } from '../../repositories/account.repository';
 import { SessionRepository } from '../../repositories/session.repository';
@@ -143,5 +143,97 @@ export class AuthService {
    */
   async logout(sessionId: string): Promise<void> {
     await this.sessionRepository.deleteUnique({ id: sessionId });
+  }
+
+  async sendPasswordResetEmail(_email: string): Promise<void> {
+    console.log(_email);
+    // step 1: find userid with email
+    // const user = await this.userRepository.findByEmail(email);
+    // if (!user) {
+    //   throw new NotFoundError('User not found');
+    // }
+    // step 2: if already token is present
+    // const existingToken = await this.userRepository.findPasswordResetToken({ userId: user.id });
+    // if (existingToken) {
+    //   // If a token exists, we delete it
+    //   await this.userRepository.invalidatePasswordResetToken(existingToken);
+    // }
+    // step 3: Generate password reset token
+    // const token = randomUUID();
+    // step 4: Save token in database
+    // await this.userRepository.savePasswordResetToken(email, token);
+    // step 5: Send email
+    // await this.emailService.sendPasswordResetEmail(email, token);
+  }
+
+  async resetPassword(_token: string, _newPassword: string): Promise<void> {
+    console.log(_token, _newPassword);
+    // step 1: find the reset token in db
+    // const resetTokenDetails = await this.userRepository.validatePasswordResetToken(token);
+    // if (!resetTokenDetails) {
+    //   throw new UnauthorizedError('Invalid or expired password reset token');
+    // }
+    // Hash new password
+    // const hashedPassword = await hashPassword(newPassword);
+    // Update user password
+    // await this.userRepository.updatePassword(email, hashedPassword);
+  }
+
+  async verifyPasswordResetToken(_token: string): Promise<void> {
+    console.log(_token);
+    // step 1: find reset token in db
+    // const email = await this.userRepository.validatePasswordResetToken(token);
+    // if (!email) {
+    //   throw new UnauthorizedError('Invalid or expired password reset token');
+    // }
+  }
+
+  async verifyAccessToken(_token: string): Promise<void> {
+    console.log(_token);
+    // step 1: find session by access token
+    // const session = await this.sessionRepository.findByToken(token);
+    // if (!session) {
+    //   throw new UnauthorizedError('Invalid or expired access token');
+    // }
+  }
+
+  async sendEmailVerification(_email: string): Promise<void> {
+    console.log(_email);
+    // step 1: find userid with email
+    // const user = await this.userRepository.findByEmail(email);
+    // if (!user) {
+    //   throw new NotFoundError('User not found');
+    // }
+    // step 1: check already any otp is sent
+    // const existingOtp = await this.userRepository.findEmailVerificationOtp(email);
+    // if (existingOtp) {
+    //   // If an OTP already exists, we can delete it
+    //   await this.userRepository.invalidateEmailVerificationOtp(existingOtp);
+    // }
+    // step 2: Generate email verification token
+    // const token = randomUUID();
+    // step 3: generate 6 digit otp
+    //const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    // step 4: Save token in database
+    // await this.userRepository.saveEmailVerificationToken(email, token, otp);
+    // step 5: Send email
+    // await this.emailService.sendEmailVerification(email, token, otp);
+  }
+
+  async verifyEmail(_token: string, _otp: string): Promise<void> {
+    console.log(_token, _otp);
+    // step 1: Generate email verification token
+    // const userTokenDetails = await this.userRepository.validateEmailVerificationToken({userId, otp, token});
+    // if (!userTokenDetails) {
+    //   throw new UnauthorizedError('Invalid or expired email verification token');
+    // }
+    // step 2: update it that email is verified
+    // await this.userRepository.verifyEmail(email);
+  }
+
+  // Generate secure 6-digit OTP
+  generateOTP(): string {
+    const otp = randomInt(100000, 1000000); // ensures always 6 digits
+    return otp.toString();
   }
 }

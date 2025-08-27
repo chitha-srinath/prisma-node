@@ -212,10 +212,10 @@ export class AuthController {
       //Set refresh token in secure cookie
       res.cookie(RefreshToken, refreshToken, {
         httpOnly: true,
-        secure: false,
+        secure: false, // must be true in production
         sameSite: 'none',
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days0
-        // path: '/api/auth/access-token', // only sent with this exact endpoint
+        // path: '/api/auth/access-token', // or "/api/auth" if you need it for multiple auth endpoints
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
       // // Redirect to frontend with access token
@@ -223,6 +223,55 @@ export class AuthController {
     } catch (error) {
       console.error(error);
       res.redirect(`${config.frontend_url}/login?error=oauth_failed`);
+    }
+  }
+
+  async forgotPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { email } = req.body;
+      await this.authService.sendPasswordResetEmail(email);
+      ResponseHandler.successResponse(res, null, 'Password reset email sent', 200);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { token, newPassword } = req.body;
+      await this.authService.resetPassword(token, newPassword);
+      ResponseHandler.successResponse(res, null, 'Password reset successfully', 200);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async verifyToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { token } = req.body;
+      await this.authService.verifyPasswordResetToken(token);
+      ResponseHandler.successResponse(res, null, 'Token is valid', 200);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async verifyEmail(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { token, otp } = req.body;
+      await this.authService.verifyEmail(token, otp);
+      ResponseHandler.successResponse(res, null, 'Email verified successfully', 200);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async verifyAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { token } = req.body;
+      await this.authService.verifyAccessToken(token);
+      ResponseHandler.successResponse(res, null, 'Access token is valid', 200);
+    } catch (error) {
+      next(error);
     }
   }
 }

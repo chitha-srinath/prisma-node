@@ -3,6 +3,7 @@ import { UserRepository, SessionRepository } from '../repositories/user.repositi
 import { User } from '@prisma/client';
 import { NotFoundError } from '../Utilities/ErrorUtility';
 import { AccountRepository } from '../repositories/account.repository';
+import { hashPassword } from '@/Utilities/encrypt-hash';
 
 /**
  * Service for user-related business logic.
@@ -200,5 +201,30 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async changePassword(_userId: string, _oldPassword: string, _newPassword: string): Promise<void> {
+    // const hashedPassword = await hashPassword(oldPassword);
+    // Validate old password in db
+    // const isValid = await this.userRepository.findAll({ userId, hashedPassword });
+
+    // if (!isValid) {
+    //   throw new UnauthorizedError('Invalid old password');
+    // }
+
+    // await this.updatePassword(userId, newPassword);
+    console.log(_userId, _oldPassword, _newPassword);
+  }
+
+  async updatePassword(userId: string, _newPassword: string): Promise<void> {
+    {
+      const _hashedPassword = await hashPassword(_newPassword);
+      await this.accountRepository.update(
+        {
+          id: userId,
+        },
+        { password: _hashedPassword },
+      );
+    }
   }
 }

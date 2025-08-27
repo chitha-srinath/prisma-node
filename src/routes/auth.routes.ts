@@ -46,6 +46,22 @@ export class AuthRoutes {
     this.router.get('/logout', requireAuth, this.authController.logout.bind(this.authController));
     this.router.get('/google', this.authController.googleOauth.bind(this.authController));
     this.router.get('/google/callback', this.authController.googleLogin.bind(this.authController));
+    this.router.get(
+      '/forgot-password',
+      this.authController.forgotPassword.bind(this.authController),
+    );
+    this.router.post('/verify-token', this.authController.verifyToken.bind(this.authController));
+    this.router.post(
+      '/reset-password',
+      this.authController.resetPassword.bind(this.authController),
+    );
+
+    this.router.post('/verify-email', this.authController.verifyEmail.bind(this.authController));
+    this.router.post(
+      '/verify-access-token',
+      requireAuth,
+      this.authController.verifyAccessToken.bind(this.authController),
+    );
   }
 
   /**
