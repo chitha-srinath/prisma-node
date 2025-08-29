@@ -32,6 +32,7 @@ export const ErrorMessages = {
     TOKEN_REQUIRED: 'Token required',
     UNAUTHORIZED: 'Unauthorized',
     FORBIDDEN: 'Forbidden',
+    INVALID_ACCESS_TOKEN: 'Invalid access token',
   },
   /**
    * Error messages for todo-related operations.

@@ -1,8 +1,7 @@
-import express, { Express, NextFunction, Response } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import { GlobalErrorHandler } from './src/middlewares/GlobalErrorHandler';
-import { BadRequestError } from './src/Utilities/ErrorUtility';
-import { ErrorMsgEnum } from './src/Enums/Error.enums';
+import { NotFoundError } from './src/Utilities/ErrorUtility';
 import helmet from 'helmet';
 import indexRoutes from './src/routes/index.routes';
 import limiter from './src/utils/rate-limit';
@@ -64,9 +63,9 @@ export class App {
    * Configures the routing structure for the entire application.
    */
   private initializeRoutes(): void {
-    // this.app.all('/api/auth/*', toNodeHandler(auth));
+    // this.app.all('/api/auth/*authPath', toNodeHandler(auth));
     this.app.use(express.json());
-    this.app.get('/health', (res: Response) => {
+    this.app.get('/health', (req: Request, res: Response) => {
       res.status(200).json({ status: 'healthy' });
     });
     this.app.use('/api', indexRoutes);
@@ -77,8 +76,9 @@ export class App {
    * Sets up catch-all route for 404 errors and global error handler.
    */
   private initializeErrorHandling(): void {
-    this.app.use((next: NextFunction) => {
-      next(new BadRequestError(ErrorMsgEnum.BAD_REQUEST));
+    // 404 handler - must be after all other routes
+    this.app.use((req: Request, _: Response, next: NextFunction) => {
+      next(new NotFoundError(`Route ${req.originalUrl} not found`));
     });
     this.app.use(GlobalErrorHandler.handleErrors);
   }

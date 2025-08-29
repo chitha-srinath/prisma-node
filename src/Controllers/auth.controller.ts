@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { DatabaseError, UnauthorizedError } from '../Utilities/ErrorUtility';
+import { BadRequestError, DatabaseError, UnauthorizedError } from '../Utilities/ErrorUtility';
 import { ResponseHandler } from '../Utilities/ResponseHandler';
 import { PrismaErrorHandler } from '../Utilities/databaseErrors';
 import { SuccessMessages } from '../constants/success-messages.constants';
@@ -12,6 +12,7 @@ import { generateJwtToken } from '../Utilities/encrypt-hash';
 import { randomUUID } from 'node:crypto';
 import { RefreshToken } from '../constants/regular.constants';
 import { UserContext } from '../Utilities/user-context';
+import { ErrorMessages } from '@/constants/error-messages.constatnts';
 
 // import { randomUUID } from 'crypto';
 
@@ -267,8 +268,9 @@ export class AuthController {
   }
   async verifyAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { token } = req.body;
-      await this.authService.verifyAccessToken(token);
+      if (!UserContext.getUser()) {
+        return next(new BadRequestError(ErrorMessages.AUTH.INVALID_ACCESS_TOKEN));
+      }
       ResponseHandler.successResponse(res, null, 'Access token is valid', 200);
     } catch (error) {
       next(error);

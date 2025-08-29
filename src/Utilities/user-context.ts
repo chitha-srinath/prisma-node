@@ -2,16 +2,16 @@ import { AsyncLocalStorage } from 'async_hooks';
 import { UserDetails, UserSession } from '../interface/user.interface';
 
 // Define the shape of the context
-interface UserContext {
+interface UserContextData {
   user?: UserDetails;
   session?: UserSession;
 }
 
 // Singleton AsyncLocalStorage instance
-const userContextStorage = new AsyncLocalStorage<UserContext>();
+const userContextStorage = new AsyncLocalStorage<UserContextData>();
 
 export const UserContext = {
-  run: <T>(context: UserContext, callback: () => T): T => {
+  run: <T>(context: UserContextData, callback: () => T): T => {
     return userContextStorage.run(context, callback);
   },
   getUser: (): UserDetails | undefined => {

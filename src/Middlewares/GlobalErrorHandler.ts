@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ResponseHandler } from '../Utilities/ResponseHandler';
 import { PrismaClient } from '@prisma/client';
 import { LoggerUtility } from '../Utilities/LoggerUtility';
@@ -18,9 +18,15 @@ export class GlobalErrorHandler {
    * @param err The error object that was thrown
    * @param req Express request object
    * @param res Express response object
-   * @param _next Express next function (unused in error handlers)
+   * @param next Express next function (required for error handlers)
    */
-  static handleErrors(err: Error & { status?: number }, req: Request, res: Response): void {
+
+  static handleErrors(
+    err: Error & { status?: number },
+    req: Request,
+    res: Response,
+    _next: NextFunction, // eslint-disable-line no-unused-vars
+  ): void {
     const statusCode = err.status || 500;
     const message = err.message || 'Internal Server Error';
     GlobalErrorHandler.logger.error(message);
