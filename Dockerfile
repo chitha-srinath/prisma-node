@@ -30,6 +30,6 @@ COPY --from=builder /build/package*.json ./package*.json
 COPY --from=builder /build/prisma ./prisma
 
 ENV NODE_ENV=production
-EXPOSE 3000
+EXPOSE 8080
 
 CMD ["node", "dist/server.js"]
