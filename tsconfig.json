@@ -20,5 +20,5 @@
     }
   },
   "exclude": ["src/repositories/abstractbaserepository.ts", "node_modules", "dist"],
-  "include": ["src/**/*", "app.ts", "server.ts"]
+  "include": ["src/**/*", "app.ts", "server.ts", "socket-server.ts"]
 }

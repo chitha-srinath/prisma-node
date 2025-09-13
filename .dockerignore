@@ -168,8 +168,5 @@ package-lock.json
 prisma/migrations/
 prisma/dev.db*
 
-# Socket.io
-socket-server.ts
-
 # Development server files
 nodemon.json
