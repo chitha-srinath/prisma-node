@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   app:
+    container_name: backend-app
     build:
       context: .
       target: builder
@@ -10,15 +11,15 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/prisma_node?schema=public
+    env_file:
+      - .env
     depends_on:
       - db
-    command: npm run dev
+    command: npm start
 
   db:
     image: postgres:14-alpine
+    container_name: my-postgres-db
     ports:
       - '5432:5432'
     environment:
