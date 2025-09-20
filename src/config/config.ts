@@ -44,41 +44,4 @@ if (!parsed.success) {
   process.exit(1);
 }
 
-const env = parsed.data;
-
-/**
- * Application configuration object containing all environment-based settings.
- * Includes database connection, JWT settings, OAuth credentials, and security options.
- * All values are validated and type-safe.
- */
-export const config = {
-  port: env.PORT,
-  dbUrl: env.DATABASE_URL,
-  frontend_url: env.FRONTEND_URL,
-  GOOGLE_CLIENT_ID: env.GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET: env.GOOGLE_CLIENT_SECRET,
-  GOOGLE_REDIRECT_URI: env.GOOGLE_REDIRECT_URI,
-  GITHUB_CLIENT_ID: env.GITHUB_CLIENT_ID,
-  GITHUB_CLIENT_SECRET: env.GITHUB_CLIENT_SECRET,
-  NODE_ENV: env.NODE_ENV,
-  jwt: {
-    accessSecret: env.JWT_ACCESS_SECRET,
-    refreshSecret: env.JWT_REFRESH_SECRET,
-    accessTokenExpiry: env.JWT_ACCESS_EXPIRY,
-    refreshTokenExpiry: env.JWT_REFRESH_EXPIRY,
-  },
-  security: {
-    argon2Options: {
-      type: 2 as const,
-      memoryCost: env.ARGON2_MEMORY_COST,
-      timeCost: env.ARGON2_TIME_COST,
-      parallelism: env.ARGON2_PARALLELISM,
-    },
-  },
-} as const;
-
-// /**
-//  * Type definition for the configuration object.
-//  * Provides type safety for configuration access throughout the application.
-//  */
-// export type Config = typeof config;
+export const env = parsed.data;

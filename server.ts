@@ -1,6 +1,6 @@
 import { createServer } from 'http';
 import { App } from './app';
-import { config } from './src/config/config';
+import { env } from './src/config/config';
 import { SocketServer } from './socket-server';
 /**
  * Creates and starts the HTTP server with Express application and Socket.IO.
@@ -20,8 +20,8 @@ new SocketServer(httpServer);
  * Start the HTTP server and listen on the configured port.
  * Logs server startup information using the application logger.
  */
-httpServer.listen(config.port, () => {
-  console.log(`Server running on port http://localhost:${config.port}`);
+httpServer.listen(env.PORT, () => {
+  console.log(`Server running on port http://localhost:${env.PORT}`);
 });
 
 export default httpServer;

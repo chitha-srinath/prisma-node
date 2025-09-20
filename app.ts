@@ -7,7 +7,7 @@ import indexRoutes from './src/routes/index.routes';
 import limiter from './src/utils/rate-limit';
 // import { toNodeHandler } from 'better-auth/node';
 // import { auth } from './auth';
-import { config } from './src/config/config';
+import { env } from './src/config/config';
 import { PrismaErrorHandler } from './src/Utilities/databaseErrors';
 import cookieParser from 'cookie-parser';
 
@@ -46,7 +46,7 @@ export class App {
   private initializeMiddlewares(): void {
     this.app.use(
       cors({
-        origin: config.frontend_url,
+        origin: env.FRONTEND_URL,
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,

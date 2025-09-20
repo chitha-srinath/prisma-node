@@ -1,6 +1,6 @@
 import jwt, { SignOptions, VerifyOptions, JwtPayload } from 'jsonwebtoken';
 import * as argon2 from 'argon2';
-import { config } from '../config/config';
+import { env } from '../config/config';
 
 /**
  * Generates a JWT token with the provided payload and options.
@@ -14,10 +14,10 @@ export function generateJwtToken<T extends string | object | Buffer>(
   payload: T,
   options: SignOptions = {},
 ): string {
-  if (!config.jwt.accessSecret) {
+  if (!env.JWT_ACCESS_SECRET) {
     throw new Error('JWT access secret is not configured');
   }
-  return jwt.sign(payload, config.jwt.accessSecret, options);
+  return jwt.sign(payload, env.JWT_ACCESS_SECRET, options);
 }
 
 /**
@@ -32,10 +32,10 @@ export async function verifyJwtToken<T extends JwtPayload>(
   token: string,
   options: VerifyOptions = {},
 ): Promise<T> {
-  if (!config.jwt.accessSecret) {
+  if (!env.JWT_ACCESS_SECRET) {
     throw new Error('JWT access secret is not configured');
   }
-  return jwt.verify(token, config.jwt.accessSecret, options) as T;
+  return jwt.verify(token, env.JWT_ACCESS_SECRET, options) as T;
 }
 
 /**
@@ -47,9 +47,9 @@ export async function verifyJwtToken<T extends JwtPayload>(
 export async function hashPassword(password: string): Promise<string> {
   const hashedPassword = await argon2.hash(password, {
     type: argon2.argon2id,
-    memoryCost: config.security.argon2Options.memoryCost,
-    timeCost: config.security.argon2Options.timeCost,
-    parallelism: config.security.argon2Options.parallelism,
+    memoryCost: env.ARGON2_MEMORY_COST,
+    timeCost: env.ARGON2_TIME_COST,
+    parallelism: env.ARGON2_PARALLELISM,
   });
 
   return hashedPassword;

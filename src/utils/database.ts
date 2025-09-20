@@ -1,11 +1,12 @@
 import { PrismaClient } from '@prisma/client';
-import { config } from '../config/config';
+import { env } from '../config/config';
 
 /**
  * Global type declaration for Prisma client in development mode.
  * Prevents multiple Prisma client instances during hot reloading.
  */
 declare global {
+  // eslint-disable-next-line no-unused-vars
   var prismaGlobal: PrismaClient | undefined;
 }
 
@@ -30,6 +31,6 @@ export const prismaConnection = globalThis.prismaGlobal ?? createPrismaClient();
  * In development mode, stores the Prisma client globally to prevent
  * multiple instances during hot reloading.
  */
-if (config.NODE_ENV !== 'production') {
+if (env.NODE_ENV !== 'production') {
   globalThis.prismaGlobal = prismaConnection;
 }

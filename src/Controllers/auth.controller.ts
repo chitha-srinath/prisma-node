@@ -7,7 +7,7 @@ import { LoginPostDto, RegisterPostDto } from '@/Dtos/auth.dto';
 import { AuthService } from '../services/Authentication/Auth.service';
 import { GoogleOAuthService } from '../services/Authentication/google.auth';
 import { UserService } from '../services/user.service';
-import { config } from '../config/config';
+import { env } from '../config/config';
 import { generateJwtToken } from '../Utilities/encrypt-hash';
 import { randomUUID } from 'node:crypto';
 import { RefreshToken } from '../constants/regular.constants';
@@ -169,7 +169,7 @@ export class AuthController {
 
       // Handle OAuth errors
       if (error) {
-        return res.redirect(`${config.frontend_url}/login?error=oauth_error`);
+        return res.redirect(`${env.FRONTEND_URL}/login?error=oauth_error`);
       }
 
       const codeStr =
@@ -180,7 +180,7 @@ export class AuthController {
             : undefined;
 
       if (!codeStr) {
-        return res.redirect(`${config.frontend_url}/login?error=missing_code`);
+        return res.redirect(`${env.FRONTEND_URL}/login?error=missing_code`);
       }
       const googleTokens = (await this.googleService.exchangeCodeForTokens(codeStr)) as {
         access_token: string;
@@ -219,11 +219,10 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      // // Redirect to frontend with access token
-      res.redirect(`${config.frontend_url}/dashboard?token=${accessToken}`);
+      res.redirect(`${env.FRONTEND_URL}/dashboard?token=${accessToken}`);
     } catch (error) {
       console.error(error);
-      res.redirect(`${config.frontend_url}/login?error=oauth_failed`);
+      res.redirect(`${env.FRONTEND_URL}/login?error=oauth_failed`);
     }
   }
 

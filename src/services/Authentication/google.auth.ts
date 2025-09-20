@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import axios from 'axios';
-import { config } from '../../config/config';
+import { env } from '../../config/config';
 
 // interface GoogleTokenResponse {
 //   access_token: string;
@@ -29,9 +29,9 @@ export class GoogleOAuthService {
   private scope: string;
 
   constructor() {
-    this.clientId = config.GOOGLE_CLIENT_ID;
-    this.clientSecret = config.GOOGLE_CLIENT_SECRET;
-    this.redirectUri = config.GOOGLE_REDIRECT_URI;
+    this.clientId = env.GOOGLE_CLIENT_ID;
+    this.clientSecret = env.GOOGLE_CLIENT_SECRET;
+    this.redirectUri = env.GOOGLE_REDIRECT_URI;
     this.scope = 'openid email profile';
   }
 
@@ -62,7 +62,7 @@ export class GoogleOAuthService {
       });
 
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error('Failed to exchange code for tokens');
     }
   }
@@ -77,7 +77,7 @@ export class GoogleOAuthService {
       });
 
       return response.data;
-    } catch (error) {
+    } catch {
       throw new Error('Failed to get user info from Google');
     }
   }
