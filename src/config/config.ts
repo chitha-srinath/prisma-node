@@ -29,6 +29,11 @@ const envSchema = z.object({
   ARGON2_MEMORY_COST: z.coerce.number().default(65536),
   ARGON2_TIME_COST: z.coerce.number().default(3),
   ARGON2_PARALLELISM: z.coerce.number().default(1),
+
+  // AWS S3 configuration (optional)
+  AWS_REGION: z.string().optional(),
+  AWS_ACCESS_KEY_ID: z.string().optional(),
+  AWS_SECRET_ACCESS_KEY: z.string().optional(),
 });
 
 /**
@@ -41,7 +46,7 @@ if (!parsed.success) {
   parsed.error.issues.forEach((error) => {
     console.error(`  ${error.path.join('.')}: ${error.message}`);
   });
-  process.exit(1);
+  throw new Error('Invalid environment variables');
 }
 
 export const env = parsed.data;

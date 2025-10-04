@@ -3,6 +3,7 @@ import { TodoRoutes } from './todo.routes';
 import { PostRoutes } from './post.routes';
 import { UserRoutes } from './user.routes';
 import { AuthRoutes } from './auth.routes';
+import StorageRoutes from './storage.routes';
 
 /**
  * Main application router that combines all feature-specific routes.
@@ -29,6 +30,7 @@ export class AppRouter {
     this.router.use('/posts', new PostRoutes().getRouter());
     this.router.use('/users', new UserRoutes().getRouter());
     this.router.use('/auth', new AuthRoutes().getRouter());
+    this.router.use('/storage', StorageRoutes);
   }
 
   /**

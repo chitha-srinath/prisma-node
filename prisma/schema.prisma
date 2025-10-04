@@ -103,3 +103,26 @@ model Jwks {
   privateKey String
   createdAt  DateTime
 }
+
+enum status {
+  pending
+  completed
+  failed
+}
+
+model File {
+  id         String    @id @default(uuid())
+  name       String
+  size       Int?
+  mimeType   String?
+  key        String // S3 key
+  bucket     String // S3 bucket
+  url        String?
+  status     status // pending, completed, failed
+  uploadedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([key, bucket])
+  @@map("file")
+}
