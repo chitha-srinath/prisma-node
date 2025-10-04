@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { StorageController } from '../Controllers/storage.controller';
-import { requireAuth } from '../middlewares/Authentication';
 import { validatePayload } from '../middlewares/Payload-verify';
 import { PayLoadType } from '../Enums/payload.enum';
 import {
@@ -22,7 +21,6 @@ const storageController = new StorageController();
  */
 router.post(
   '/upload-url',
-  requireAuth,
   validatePayload(GenerateUploadUrlDto, PayLoadType.BODY),
   storageController.generateUploadUrl,
 );
@@ -34,7 +32,6 @@ router.post(
  */
 router.post(
   '/multiple-upload-urls',
-  requireAuth,
   validatePayload(GenerateMultipleUploadUrlsDto, PayLoadType.BODY),
   storageController.generateMultipleUploadUrls,
 );
@@ -46,7 +43,6 @@ router.post(
  */
 router.post(
   '/multipart/initiate',
-  requireAuth,
   validatePayload(InitiateMultipartUploadDto, PayLoadType.BODY),
   storageController.initiateMultipartUpload,
 );
@@ -58,7 +54,6 @@ router.post(
  */
 router.post(
   '/multipart/initiate-multiple',
-  requireAuth,
   validatePayload(InitiateMultipleMultipartUploadsDto, PayLoadType.BODY),
   storageController.initiateMultipleMultipartUploads,
 );
@@ -70,7 +65,6 @@ router.post(
  */
 router.post(
   '/multipart/upload-part-url',
-  requireAuth,
   validatePayload(UploadPartUrlDto, PayLoadType.BODY),
   storageController.generateUploadPartUrl,
 );
@@ -82,7 +76,6 @@ router.post(
  */
 router.post(
   '/multipart/complete',
-  requireAuth,
   validatePayload(CompleteMultipartUploadDto, PayLoadType.BODY),
   storageController.completeMultipartUpload,
 );
@@ -92,20 +85,20 @@ router.post(
  * @desc Get upload progress for a multipart upload
  * @access Private
  */
-router.get('/progress/:uploadId', requireAuth, storageController.getUploadProgress);
+router.get('/progress/:uploadId', storageController.getUploadProgress);
 
 /**
  * @route POST /storage/upload
  * @desc Direct file upload (simplified version)
  * @access Private
  */
-router.post('/upload', requireAuth, storageController.uploadFile);
+router.post('/upload', storageController.uploadFile);
 
 /**
  * @route GET /storage/download-url/:bucket/:key
  * @desc Generate a presigned URL for file download
  * @access Private
  */
-router.get('/download-url/:bucket/:key', requireAuth, storageController.generateDownloadUrl);
+router.get('/download-url/:bucket/:key', storageController.generateDownloadUrl);
 
 export default router;
