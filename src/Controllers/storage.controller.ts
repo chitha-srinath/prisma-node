@@ -43,7 +43,6 @@ export class StorageController {
 
       const response: UploadResponseDto = {
         key,
-        url: `https://${bucket}.s3.${env.AWS_REGION}.amazonaws.com/${key}`,
         uploadUrl,
       };
 

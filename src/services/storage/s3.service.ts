@@ -30,8 +30,8 @@ export class S3StorageService {
     this.s3Client = new S3Client({
       region: env.AWS_REGION,
       credentials: {
-        accessKeyId: env.AWS_ACCESS_KEY_ID || '',
-        secretAccessKey: env.AWS_SECRET_ACCESS_KEY || '',
+        accessKeyId: env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
       },
     });
     this.fileRepository = new FileRepository();
@@ -39,6 +39,7 @@ export class S3StorageService {
 
   /**
    * Generate a presigned URL for uploading a file
+   * presignded URL send to client, which can be used to upload the file without backend
    */
   async generateUploadUrl(params: PresignedUrlParams): Promise<string> {
     // Build metadata object to avoid comma operator issues
@@ -96,6 +97,7 @@ export class S3StorageService {
 
   /**
    * Direct upload a file buffer to S3
+   * file send to backend(here) and then uploaded to S3
    */
   async uploadFileBuffer(
     buffer: Buffer,
@@ -179,7 +181,7 @@ export class S3StorageService {
    */
   generateUniqueKey(fileName: string): string {
     const ext = fileName.split('.').pop();
-    return `${randomUUID()}.${ext}`;
+    return `${randomUUID()}-${fileName.split('.')[0].length > 20 ? fileName.split('.')[0].substring(0, 20) + '...' : fileName.split('.')[0]}.${ext}`;
   }
 
   /**

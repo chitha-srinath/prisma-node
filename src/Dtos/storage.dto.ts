@@ -155,7 +155,7 @@ export type UploadProgressRequestDto = z.infer<typeof UploadProgressDto>;
 
 export interface UploadResponseDto {
   key: string;
-  url: string;
+  url?: string;
   uploadUrl?: string;
 }
 
