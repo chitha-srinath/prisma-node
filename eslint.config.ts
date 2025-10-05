@@ -39,7 +39,7 @@ export default tseslint.config(js.configs.recommended, ...tseslint.configs.recom
 
     /* ----- Style / Misc ----- */
     semi: ['error', 'always'],
-    quotes: ['error', 'double'],
+    // quotes: ["error", "double"],
     eqeqeq: ['error', 'always'],
   },
 });
