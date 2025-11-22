@@ -3,7 +3,6 @@
 
 // // Define job: run every hour
 // cron.schedule('0 * * * *', async () => {
-//   console.log('🔄 Running TTL cleanup job...');
 
 //   try {
 //     const result = await Prisma.session.deleteMany({
@@ -14,7 +13,6 @@
 //       },
 //     });
 
-//     console.log(`✅ Deleted ${result.count} expired sessions`);
 //   } catch (err) {
 //     console.error('❌ Error cleaning expired sessions', err);
 //   }

@@ -110,7 +110,6 @@ export class AuthController {
    */
   async getAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log(req.cookies);
       const token = req.cookies['refresh-token'];
 
       if (!token) {
