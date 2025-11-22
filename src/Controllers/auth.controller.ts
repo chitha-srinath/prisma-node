@@ -226,7 +226,7 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      res.redirect(`${env.FRONTEND_URL}/dashboard?token=${accessToken}`);
+      res.redirect(`${env.FRONTEND_URL}/?token=${accessToken}`);
     } catch (error) {
       console.error(error);
       res.redirect(`${env.FRONTEND_URL}/login?error=oauth_failed`);
