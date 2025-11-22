@@ -13,6 +13,7 @@ import { randomUUID } from 'node:crypto';
 import { RefreshToken } from '../constants/regular.constants';
 import { UserContext } from '../Utilities/user-context';
 import { ErrorMessages } from '@/constants/error-messages.constatnts';
+import { SessionRepository } from '../repositories/session.repository';
 
 // import { randomUUID } from 'crypto';
 
@@ -24,6 +25,7 @@ export class AuthController {
   private readonly authService: AuthService;
   private readonly googleService: GoogleOAuthService;
   private readonly userService: UserService;
+  private readonly sessionRepository: SessionRepository;
   /**
    * Initializes the AuthController and its AuthService dependency.
    */
@@ -31,6 +33,7 @@ export class AuthController {
     this.authService = new AuthService();
     this.googleService = new GoogleOAuthService();
     this.userService = new UserService();
+    this.sessionRepository = new SessionRepository();
   }
 
   /**
@@ -46,9 +49,9 @@ export class AuthController {
       //Set refresh token in secure cookie
       res.cookie(RefreshToken, result.refreshToken, {
         httpOnly: true,
-        secure: false, // must be true in production
-        sameSite: 'none',
-        // path: '/api/auth/access-token', // or "/api/auth" if you need it for multiple auth endpoints
+        secure: env.NODE_ENV === 'production', // false locally
+        sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: '/api/auth/access-token', // or "/api/auth" if you need it for multiple auth endpoints
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
@@ -107,7 +110,8 @@ export class AuthController {
    */
   async getAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const token = req?.cookies?.refreshToken as string;
+      console.log(req.cookies);
+      const token = req.cookies['refresh-token'];
 
       if (!token) {
         next(new UnauthorizedError('no refresh token provided'));
@@ -139,12 +143,11 @@ export class AuthController {
         await this.authService.logout(sessionId);
       }
 
-      // Clear refresh token cookie
       res.clearCookie(RefreshToken, {
         httpOnly: true,
-        secure: false, // must be true in production
-        sameSite: 'none',
-        // path: '/api/auth/access-token',
+        secure: env.NODE_ENV === 'production', // false locally
+        sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: '/api/auth/access-token', // or "/api/auth" if you need it for multiple auth endpoints
         maxAge: 0,
         expires: new Date(Date.now()),
       });
@@ -208,14 +211,19 @@ export class AuthController {
       });
 
       // Save session in your database
-      await this.userService.createSession({ userId: user.id, sessionId });
+      await this.sessionRepository.createSession(
+        sessionId,
+        user.id,
+        refreshToken,
+        new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      );
 
       //Set refresh token in secure cookie
       res.cookie(RefreshToken, refreshToken, {
         httpOnly: true,
-        secure: false, // must be true in production
-        sameSite: 'none',
-        // path: '/api/auth/access-token', // or "/api/auth" if you need it for multiple auth endpoints
+        secure: env.NODE_ENV === 'production', // false locally
+        sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: '/api/auth/access-token', // or "/api/auth" if you need it for multiple auth endpoints
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 

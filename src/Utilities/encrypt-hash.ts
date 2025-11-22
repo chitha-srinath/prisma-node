@@ -20,6 +20,16 @@ export function generateJwtToken<T extends string | object | Buffer>(
   return jwt.sign(payload, env.JWT_ACCESS_SECRET, options);
 }
 
+export function generaterefreshToken<T extends string | object | Buffer>(
+  payload: T,
+  options: SignOptions = {},
+): string {
+  if (!env.JWT_REFRESH_SECRET) {
+    throw new Error('JWT access secret is not configured');
+  }
+  return jwt.sign(payload, env.JWT_REFRESH_SECRET, options);
+}
+
 /**
  * Verifies and decodes a JWT token.
  * Uses the configured JWT access secret for verification.
@@ -36,6 +46,16 @@ export async function verifyJwtToken<T extends JwtPayload>(
     throw new Error('JWT access secret is not configured');
   }
   return jwt.verify(token, env.JWT_ACCESS_SECRET, options) as T;
+}
+
+export async function verifyRefreshToken<T extends JwtPayload>(
+  token: string,
+  options: VerifyOptions = {},
+): Promise<T> {
+  if (!env.JWT_REFRESH_SECRET) {
+    throw new Error('JWT access secret is not configured');
+  }
+  return jwt.verify(token, env.JWT_REFRESH_SECRET, options) as T;
 }
 
 /**

@@ -141,15 +141,6 @@ export class UserService {
     return user;
   }
 
-  async createSession(payload: { userId: string; sessionId: string }): Promise<void> {
-    await this.sessionRepository.insert({
-      id: payload.sessionId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      user: { connect: { id: payload.userId } },
-    });
-  }
-
   // src/services/user.service.ts
   async findOrCreateUserWithProvider({
     providerId,
