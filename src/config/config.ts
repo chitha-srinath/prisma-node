@@ -8,13 +8,13 @@ import { z } from 'zod';
 const envSchema = z.object({
   // Required core variables
   PORT: z.coerce.number().min(1).max(65535),
-  DATABASE_URL: z.string().url(),
+  DATABASE_URL: z.url(),
   JWT_ACCESS_SECRET: z.string().min(16, 'JWT access secret must be at least 16 characters'),
   JWT_REFRESH_SECRET: z.string().min(16, 'JWT refresh secret must be at least 16 characters'),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
   // Optional variables with defaults
-  FRONTEND_URL: z.string().url().optional(),
+  FRONTEND_URL: z.url().optional(),
   JWT_ACCESS_EXPIRY: z.string().default('15m'),
   JWT_REFRESH_EXPIRY: z.string().default('7d'),
 
