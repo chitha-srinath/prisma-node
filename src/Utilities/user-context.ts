@@ -3,8 +3,8 @@ import { UserDetails, UserSession } from '../interface/user.interface';
 
 // Define the shape of the context
 interface UserContextData {
-  user?: UserDetails;
-  session?: UserSession;
+  user: UserDetails;
+  session: UserSession;
 }
 
 // Singleton AsyncLocalStorage instance
@@ -24,13 +24,13 @@ export const UserContext = {
   },
   setUser: (user: UserDetails): void => {
     const store = userContextStorage.getStore();
-    if (store) {
+    if (store && store.user) {
       store.user = user;
     }
   },
   setSession: (session: UserSession): void => {
     const store = userContextStorage.getStore();
-    if (store) {
+    if (store && store.session) {
       store.session = session;
     }
   },
