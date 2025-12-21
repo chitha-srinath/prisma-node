@@ -1,6 +1,6 @@
 import { Todo } from '@prisma/client';
 import { TodoRepository } from '../repositories/todo.repository';
-import { CreateTodoData, UpdateTodoData } from '@/Dtos/todo.dto';
+import { CreateTodoData, GetTodosData, UpdateTodoData } from '@/Dtos/todo.dto';
 import { NotFoundError } from '../Utilities/ErrorUtility';
 
 /**
@@ -39,8 +39,42 @@ export class TodoService {
    * Retrieves all todo items from the database.
    * @returns Promise resolving to an array of Todo objects
    */
-  async getAllTodos(): Promise<Todo[]> {
-    return this.todoRepository.findAll();
+  async getAllTodos(data: GetTodosData): Promise<{
+    todos: Todo[];
+    pagination: {
+      page: number;
+      limit: number;
+      total: number;
+      skip: number;
+    };
+  }> {
+    const { userId, limit = 20 } = data;
+    let page = 1;
+
+    if ('page' in data) {
+      page = data.page;
+    }
+
+    const skip = (page - 1) * limit;
+
+    const todos = await this.todoRepository.findAll(
+      { userId: userId },
+      undefined,
+      undefined,
+      undefined,
+      skip,
+      limit,
+    );
+    const total = await this.todoRepository.count({ userId: userId });
+    return {
+      todos,
+      pagination: {
+        page,
+        limit,
+        total,
+        skip,
+      },
+    };
   }
 
   /**
@@ -73,8 +107,9 @@ export class TodoService {
    * @returns Promise resolving to the deleted Todo object
    * @throws NotFoundError if the todo item with the given ID is not found
    */
-  async deleteTodo(id: string): Promise<Todo> {
-    const todo = await this.todoRepository.findById(id);
+  async deleteTodo(id: string, data: UpdateTodoData): Promise<Todo> {
+    const todo = await this.todoRepository.findUnique({ id, userId: data.userId });
+
     if (!todo) {
       throw new NotFoundError('Todo not found');
     }

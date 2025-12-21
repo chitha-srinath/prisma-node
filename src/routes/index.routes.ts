@@ -4,6 +4,7 @@ import { PostRoutes } from './post.routes';
 import { UserRoutes } from './user.routes';
 import { AuthRoutes } from './auth.routes';
 import StorageRoutes from './storage.routes';
+import { requireAuth } from '../middlewares/Authentication';
 
 /**
  * Main application router that combines all feature-specific routes.
@@ -26,8 +27,8 @@ export class AppRouter {
    * Organizes routes by functionality for better maintainability.
    */
   private initializeRoutes(): void {
-    this.router.use('/todos', new TodoRoutes().getRouter());
-    this.router.use('/posts', new PostRoutes().getRouter());
+    this.router.use('/todos', requireAuth, new TodoRoutes().getRouter());
+    this.router.use('/posts', requireAuth, new PostRoutes().getRouter());
     this.router.use('/users', new UserRoutes().getRouter());
     this.router.use('/auth', new AuthRoutes().getRouter());
     this.router.use('/storage', StorageRoutes);

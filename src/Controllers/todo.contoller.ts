@@ -2,9 +2,11 @@ import { NextFunction, Request, Response } from 'express';
 import { DatabaseError, NotFoundError } from '../Utilities/ErrorUtility';
 import { ResponseHandler } from '../Utilities/ResponseHandler';
 import { PrismaErrorHandler } from '../Utilities/databaseErrors';
-import { TodoService } from '../services/todo.service';
-import { SuccessMessages } from '../constants/success-messages.constants';
 import { ErrorMessages } from '../constants/error-messages.constatnts';
+import { SuccessMessages } from '../constants/success-messages.constants';
+import { TodoService } from '../services/todo.service';
+import { UserContext } from '@/Utilities/user-context';
+import { CreateTodoData, GetTodosData, UpdateTodoData } from '@/Dtos/todo.dto';
 
 /**
  * Controller for todo-related endpoints.
@@ -29,7 +31,15 @@ export class TodoController {
    */
   async createTodo(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const todo = await this.todoService.createTodo(req.body);
+      const userId = UserContext.getUser()?.id;
+      if (!userId) {
+        throw new NotFoundError(ErrorMessages.USER.USER_NOT_FOUND);
+      }
+      const payload: CreateTodoData = {
+        ...req.body,
+        userId,
+      };
+      const todo = await this.todoService.createTodo(payload);
       ResponseHandler.successResponse(res, todo, SuccessMessages.TODO.CREATED, 201);
     } catch (error) {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
@@ -45,9 +55,17 @@ export class TodoController {
    * @param res Express response object
    * @param next Express next function for error handling
    */
-  async getAllTodos(_req: Request, res: Response, next: NextFunction): Promise<void> {
+  async getAllTodos(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const todos = await this.todoService.getAllTodos();
+      const userId = UserContext.getUser()?.id;
+      if (!userId) {
+        throw new NotFoundError(ErrorMessages.USER.USER_NOT_FOUND);
+      }
+      const payload: GetTodosData = {
+        ...req.body,
+        userId,
+      };
+      const todos = await this.todoService.getAllTodos(payload);
       ResponseHandler.successResponse(res, todos);
     } catch (error) {
       next(error);
@@ -83,8 +101,15 @@ export class TodoController {
   async updateTodo(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;
-      const data = req.body;
-      const todo = await this.todoService.updateTodo(id, data);
+      const userId = UserContext.getUser()?.id;
+      if (!userId) {
+        throw new NotFoundError(ErrorMessages.USER.USER_NOT_FOUND);
+      }
+      const payload: UpdateTodoData = {
+        ...req.body,
+        userId,
+      };
+      const todo = await this.todoService.updateTodo(id, payload);
       ResponseHandler.successResponse(res, todo);
     } catch (error) {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
@@ -103,7 +128,14 @@ export class TodoController {
   async deleteTodo(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;
-      await this.todoService.deleteTodo(id);
+      const userId = UserContext.getUser()?.id;
+      if (!userId) {
+        throw new NotFoundError(ErrorMessages.USER.USER_NOT_FOUND);
+      }
+      const payload: UpdateTodoData = {
+        userId,
+      };
+      await this.todoService.deleteTodo(id, payload);
       res.sendStatus(204);
     } catch (error) {
       next(error);

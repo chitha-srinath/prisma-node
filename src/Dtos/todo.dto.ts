@@ -35,6 +35,9 @@ const pageSchema = object({
   page: number({
     message: 'Page must be a number',
   }),
+  skip: number({
+    message: 'Skip must be a number',
+  }),
   ...baseTodoDto,
 }).strict();
 

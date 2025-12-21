@@ -88,6 +88,8 @@ export class BaseRepository<T, CreateInput, UpdateInput, WhereInput, WhereUnique
     select?: Record<string, boolean>,
     include?: Record<string, boolean>,
     orderBy?: Record<string, 'asc' | 'desc'>,
+    skip?: number,
+    take?: number,
   ): Promise<T[]> {
     const model = this.getModel() as {
       findMany: (args?: {
@@ -104,6 +106,8 @@ export class BaseRepository<T, CreateInput, UpdateInput, WhereInput, WhereUnique
       ...(orderBy && { orderBy }),
       ...(select && { select }),
       ...(include && { include }),
+      ...(skip && { skip }),
+      ...(take && { take }),
     });
     return result;
   }
@@ -212,6 +216,19 @@ export class BaseRepository<T, CreateInput, UpdateInput, WhereInput, WhereUnique
       }) => Promise<{ count: number }>;
     };
     const result = await model.updateMany({ where, data, limit });
+    return result;
+  }
+
+  /**
+   * Counts entities matching the query.
+   * @param where Query filter
+   * @returns Count of entities
+   */
+  async count(where?: WhereInput): Promise<number> {
+    const model = this.getModel() as {
+      count: (args?: { where?: WhereInput }) => Promise<number>;
+    };
+    const result = await model.count({ where });
     return result;
   }
 

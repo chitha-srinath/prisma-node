@@ -26,7 +26,7 @@ export const updatePostDto = object({
 export const basePostDto = {
   limit: number({
     message: 'Limit must be a number',
-  }),
+  }).optional(),
   search: string().min(1, 'Search term is required').optional(),
 };
 
@@ -36,6 +36,9 @@ export const basePostDto = {
 const pageSchema = object({
   page: number({
     message: 'Page must be a number',
+  }),
+  skip: number({
+    message: 'Skip must be a number',
   }),
   ...basePostDto,
 }).strict();
