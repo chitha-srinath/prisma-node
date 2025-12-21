@@ -6,6 +6,7 @@ import { PostService } from '../services/post.service';
 import { SuccessMessages } from '../constants/success-messages.constants';
 import { ErrorMessages } from '../constants/error-messages.constatnts';
 import { CreatePostData } from '../Dtos/post.dto';
+import { UserContext } from '@/Utilities/user-context';
 
 /**
  * Controller for post-related endpoints.
@@ -30,7 +31,15 @@ export class PostController {
    */
   async createpost(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const post = await this.postService.createpost(req.body as unknown as CreatePostData);
+      const userId = UserContext.getUser()?.id;
+      if (!userId) {
+        throw new NotFoundError(ErrorMessages.USER.USER_NOT_FOUND);
+      }
+      const payload: CreatePostData = {
+        ...req.body,
+        userId,
+      };
+      const post = await this.postService.createpost(payload);
       ResponseHandler.successResponse(res, post, SuccessMessages.POST.CREATED, 201);
     } catch (error) {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
@@ -64,7 +73,7 @@ export class PostController {
   async getpostById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
-      const post = await this.postService.getpostById(Number(id));
+      const post = await this.postService.getpostById(id);
       if (!post) {
         next(new NotFoundError(ErrorMessages.POST.POST_NOT_FOUND));
         return;
@@ -85,7 +94,7 @@ export class PostController {
     try {
       const id = req.params.id;
       const data = req.body;
-      const post = await this.postService.updatepost(Number(id), data);
+      const post = await this.postService.updatepost(id, data);
       ResponseHandler.successResponse(res, post);
     } catch (error) {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
@@ -104,7 +113,7 @@ export class PostController {
   async deletepost(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;
-      await this.postService.deletepost(Number(id));
+      await this.postService.deletepost(id);
       res.sendStatus(204);
     } catch (error) {
       next(error);

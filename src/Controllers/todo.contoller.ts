@@ -63,7 +63,7 @@ export class TodoController {
   async getTodoById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
-      const todo = await this.todoService.getTodoById(Number(id));
+      const todo = await this.todoService.getTodoById(id);
       if (!todo) {
         next(new NotFoundError(ErrorMessages.TODO.TODO_NOT_FOUND));
         return;
@@ -84,7 +84,7 @@ export class TodoController {
     try {
       const id = req.params.id;
       const data = req.body;
-      const todo = await this.todoService.updateTodo(Number(id), data);
+      const todo = await this.todoService.updateTodo(id, data);
       ResponseHandler.successResponse(res, todo);
     } catch (error) {
       if (PrismaErrorHandler.handlePrismaError(error) instanceof DatabaseError) {
@@ -103,7 +103,7 @@ export class TodoController {
   async deleteTodo(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;
-      await this.todoService.deleteTodo(Number(id));
+      await this.todoService.deleteTodo(id);
       res.sendStatus(204);
     } catch (error) {
       next(error);

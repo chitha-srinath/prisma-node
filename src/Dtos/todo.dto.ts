@@ -1,32 +1,72 @@
-import { z } from 'zod';
+import { z, object, string, boolean, number, uuid, union } from 'zod/v4';
+import { BaseDto } from './base.dto';
 
 /**
  * Zod schema for todo creation validation.
- * Validates required fields for creating a new todo item.
  */
-export const createTodoDto = z.object({
-  title: z.string().min(1, { message: 'Title is required' }),
-  description: z.string().optional(),
-});
+export const createTodoDto = object({
+  title: string().min(1, 'Title is required'),
+  description: string().optional(),
+}).strict();
 
 /**
  * Zod schema for todo update validation.
- * Validates optional fields for updating an existing todo item.
  */
-export const updateTodoDto = z.object({
-  title: z.string().min(1, { message: 'Title must not be empty' }).optional(),
-  description: z.string().optional(),
-  completed: z.boolean().optional(),
-});
+export const updateTodoDto = object({
+  title: string().min(1, 'Title must not be empty').optional(),
+  description: string().optional(),
+  completed: boolean().optional(),
+}).strict();
 
 /**
- * TypeScript type for todo creation request data.
- * Inferred from createTodoDto schema for type safety.
+ * Base schema for todo retrieval (shared fields)
  */
-export type CreateTodoData = z.infer<typeof createTodoDto>;
+export const baseTodoDto = {
+  limit: number({
+    message: 'Limit must be a number',
+  }),
+  search: string().min(1, 'Search term is required').optional(),
+};
 
 /**
- * TypeScript type for todo update request data.
- * Inferred from updateTodoDto schema for type safety.
+ * Page-based pagination
  */
-export type UpdateTodoData = z.infer<typeof updateTodoDto>;
+const pageSchema = object({
+  page: number({
+    message: 'Page must be a number',
+  }),
+  ...baseTodoDto,
+}).strict();
+
+/**
+ * Cursor-based pagination
+ */
+const cursorSchema = object({
+  cursor: uuid({
+    message: 'Cursor must be a valid UUID',
+  }),
+  ...baseTodoDto,
+}).strict();
+
+/**
+ * Todo retrieval DTO
+ * Either page OR cursor (never both)
+ */
+export const getTodosDto = union([pageSchema, cursorSchema]);
+
+/**
+ * Zod schema for todo deletion validation.
+ */
+export const deleteTodoDto = object({
+  todoId: uuid({
+    message: 'Invalid todo ID format',
+  }),
+}).strict();
+
+/**
+ * TypeScript inferred types
+ */
+export type CreateTodoData = z.infer<typeof createTodoDto> & BaseDto;
+export type UpdateTodoData = z.infer<typeof updateTodoDto> & BaseDto;
+export type DeleteTodoData = z.infer<typeof deleteTodoDto> & BaseDto;
+export type GetTodosData = z.infer<typeof getTodosDto> & BaseDto;

@@ -50,7 +50,7 @@ export class PostService {
    * @param id The unique identifier of the post
    * @returns Promise resolving to the Post object or null if not found
    */
-  async getpostById(id: number): Promise<Post | null> {
+  async getpostById(id: string): Promise<Post | null> {
     const result = await this.postRepository.findById(id);
     return result;
   }
@@ -62,8 +62,8 @@ export class PostService {
    * @returns Promise resolving to the updated Post object
    * @throws NotFoundError if the post with the given ID is not found
    */
-  async updatepost(id: number, data: UpdatePostData): Promise<{ count: number }> {
-    const post = await this.postRepository.updateMany({ id }, data, 1);
+  async updatepost(id: string, data: UpdatePostData): Promise<{ count: number }> {
+    const post = await this.postRepository.updateMany({ id }, data);
     if (!post.count) {
       throw new NotFoundError('Post not found');
     }
@@ -76,7 +76,7 @@ export class PostService {
    * @returns Promise resolving to the deleted Post object
    * @throws NotFoundError if the post with the given ID is not found
    */
-  async deletepost(id: number): Promise<Post> {
+  async deletepost(id: string): Promise<Post> {
     const post = await this.postRepository.findById(id);
     if (!post) {
       throw new NotFoundError('Post not found');

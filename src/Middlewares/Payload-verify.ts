@@ -25,7 +25,7 @@ export function validatePayload<T>(schema: ZodSchema<T>, type: ValidationType = 
         const issue = error.issues[0];
         next(
           new PayloadError(
-            `${issue?.message || 'Validation failed'} for ${issue?.path?.[0] !== undefined ? String(issue.path[0]) : 'field'}`,
+            `${issue?.message !== 'Invalid input' ? issue?.message : 'Payload Validation failed'}`,
           ),
         );
       } else {

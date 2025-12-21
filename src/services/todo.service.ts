@@ -24,7 +24,15 @@ export class TodoService {
    * @returns Promise resolving to the created Todo object
    */
   async createTodo(data: CreateTodoData): Promise<Todo> {
-    return this.todoRepository.insert(data);
+    const { userId, ...todoData } = data;
+    return this.todoRepository.insert({
+      ...todoData,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    });
   }
 
   /**
@@ -40,7 +48,7 @@ export class TodoService {
    * @param id The unique identifier of the todo item
    * @returns Promise resolving to the Todo object or null if not found
    */
-  async getTodoById(id: number): Promise<Todo | null> {
+  async getTodoById(id: string): Promise<Todo | null> {
     return this.todoRepository.findById(id);
   }
 
@@ -51,7 +59,7 @@ export class TodoService {
    * @returns Promise resolving to the updated Todo object
    * @throws NotFoundError if the todo item with the given ID is not found
    */
-  async updateTodo(id: number, data: UpdateTodoData): Promise<Todo> {
+  async updateTodo(id: string, data: UpdateTodoData): Promise<Todo> {
     const todo = await this.todoRepository.findById(id);
     if (!todo) {
       throw new NotFoundError('Todo not found');
@@ -65,7 +73,7 @@ export class TodoService {
    * @returns Promise resolving to the deleted Todo object
    * @throws NotFoundError if the todo item with the given ID is not found
    */
-  async deleteTodo(id: number): Promise<Todo> {
+  async deleteTodo(id: string): Promise<Todo> {
     const todo = await this.todoRepository.findById(id);
     if (!todo) {
       throw new NotFoundError('Todo not found');

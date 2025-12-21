@@ -1,33 +1,74 @@
-import { z, object, string, boolean } from 'zod';
+import { z, object, string, boolean, number, uuid, union } from 'zod/v4';
+import { BaseDto } from './base.dto';
 
 /**
- * Zod schema for post creation validation.
- * Validates required fields for creating a new post.
+ * Zod schema for todo creation validation.
  */
 export const createPostDto = object({
-  title: string().min(1, { message: 'Title is required' }),
+  title: string({
+    message: 'Title is required',
+  }).min(2, 'Title should be more than 1 character'),
   description: string().optional(),
-  userId: string({ message: 'User ID is required' }).uuid({ message: 'Invalid user ID format' }),
 }).strict();
 
 /**
- * Zod schema for post update validation.
- * Validates optional fields for updating an existing post.
+ * Zod schema for todo update validation.
  */
 export const updatePostDto = object({
-  title: string().min(1, { message: 'Title must not be empty' }).optional(),
+  title: string().min(2, 'Title should be more than 1 character').optional(),
   description: string().optional(),
   completed: boolean().optional(),
 }).strict();
 
 /**
- * TypeScript type for post creation request data.
- * Inferred from createPostDto schema for type safety.
+ * Base schema for p  ost retrieval (shared fields)
  */
-export type CreatePostData = z.infer<typeof createPostDto>;
+export const basePostDto = {
+  limit: number({
+    message: 'Limit must be a number',
+  }),
+  search: string().min(1, 'Search term is required').optional(),
+};
 
 /**
- * TypeScript type for post update request data.
- * Inferred from updatePostDto schema for type safety.
+ * Page-based pagination
  */
-export type UpdatePostData = z.infer<typeof updatePostDto>;
+const pageSchema = object({
+  page: number({
+    message: 'Page must be a number',
+  }),
+  ...basePostDto,
+}).strict();
+
+/**
+ * Cursor-based pagination
+ */
+const cursorSchema = object({
+  cursor: uuid({
+    message: 'Cursor id is invalid',
+  }),
+  ...basePostDto,
+}).strict();
+
+/**
+ * Post retrieval DTO
+ * Either page OR cursor (never both)
+ */
+export const getPostsDto = union([pageSchema, cursorSchema]);
+
+/**
+ * Zod schema for post deletion validation.
+ */
+export const deletePostDto = object({
+  postId: uuid({
+    message: 'Invalid post id',
+  }),
+}).strict();
+
+/**
+ * TypeScript inferred types
+ */
+export type CreatePostData = z.infer<typeof createPostDto> & BaseDto;
+export type UpdatePostData = z.infer<typeof updatePostDto> & BaseDto;
+export type DeletePostData = z.infer<typeof deletePostDto> & BaseDto;
+export type GetPostsData = z.infer<typeof getPostsDto> & BaseDto;

@@ -143,7 +143,7 @@ export class BaseRepository<T, CreateInput, UpdateInput, WhereInput, WhereUnique
    * @returns The entity or null if not found
    */
   async findById(
-    id: number,
+    id: string,
     select?: Record<string, boolean>,
     include?: Record<string, boolean>,
   ): Promise<T | null> {
@@ -231,7 +231,7 @@ export class BaseRepository<T, CreateInput, UpdateInput, WhereInput, WhereUnique
    * @param id Entity ID
    * @returns The deleted entity
    */
-  async delete(id: number): Promise<T> {
+  async delete(id: string | number): Promise<T> {
     const model = this.getModel() as { delete: (args: { where: WhereUniqueInput }) => Promise<T> };
     const result = await model.delete({ where: { id } as WhereUniqueInput });
     return result;
