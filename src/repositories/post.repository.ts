@@ -1,5 +1,5 @@
 import { Post, Prisma } from '@prisma/client';
-import { BaseRepository } from './baserepostiory';
+import { BaseRepository } from './base.repository';
 import { PrismaClient } from '@prisma/client';
 
 /**

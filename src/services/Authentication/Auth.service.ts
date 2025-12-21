@@ -2,7 +2,7 @@ import { LoginPostDto, RegisterPostDto } from '../../Dtos/auth.dto';
 import { hashPassword, verifyPassword, generateJwtToken } from '../../Utilities/encrypt-hash';
 import { UnauthorizedError, BadRequestError } from '../../Utilities/ErrorUtility';
 import { randomUUID, randomInt } from 'node:crypto';
-import { UserRepository } from '../../repositories/user.repositiory';
+import { UserRepository } from '../../repositories/user.repository';
 import { AccountRepository } from '../../repositories/account.repository';
 import { SessionRepository } from '../../repositories/session.repository';
 
@@ -146,7 +146,6 @@ export class AuthService {
   }
 
   async sendPasswordResetEmail(_email: string): Promise<void> {
-    console.log(_email);
     // step 1: find userid with email
     // const user = await this.userRepository.findByEmail(email);
     // if (!user) {
@@ -167,7 +166,6 @@ export class AuthService {
   }
 
   async resetPassword(_token: string, _newPassword: string): Promise<void> {
-    console.log(_token, _newPassword);
     // step 1: find the reset token in db
     // const resetTokenDetails = await this.userRepository.validatePasswordResetToken(token);
     // if (!resetTokenDetails) {
@@ -180,7 +178,6 @@ export class AuthService {
   }
 
   async verifyPasswordResetToken(_token: string): Promise<void> {
-    console.log(_token);
     // step 1: find reset token in db
     // const email = await this.userRepository.validatePasswordResetToken(token);
     // if (!email) {
@@ -189,7 +186,6 @@ export class AuthService {
   }
 
   async verifyAccessToken(_token: string): Promise<void> {
-    console.log(_token);
     // step 1: find session by access token
     // const session = await this.sessionRepository.findByToken(token);
     // if (!session) {
@@ -198,7 +194,6 @@ export class AuthService {
   }
 
   async sendEmailVerification(_email: string): Promise<void> {
-    console.log(_email);
     // step 1: find userid with email
     // const user = await this.userRepository.findByEmail(email);
     // if (!user) {
@@ -221,7 +216,6 @@ export class AuthService {
   }
 
   async verifyEmail(_token: string, _otp: string): Promise<void> {
-    console.log(_token, _otp);
     // step 1: Generate email verification token
     // const userTokenDetails = await this.userRepository.validateEmailVerificationToken({userId, otp, token});
     // if (!userTokenDetails) {

@@ -1,5 +1,5 @@
 import { Todo } from '@prisma/client';
-import { TodoRepository } from '../repositories/Todo.repostiory';
+import { TodoRepository } from '../repositories/todo.repository';
 import { CreateTodoData, UpdateTodoData } from '@/Dtos/todo.dto';
 import { NotFoundError } from '../Utilities/ErrorUtility';
 

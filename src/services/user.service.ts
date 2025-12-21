@@ -1,5 +1,5 @@
 import { CreateUserData, UpdateUserData } from '@/Dtos/user.dto';
-import { UserRepository, SessionRepository } from '../repositories/user.repositiory';
+import { UserRepository, SessionRepository } from '../repositories/user.repository';
 import { User } from '@prisma/client';
 import { NotFoundError } from '../Utilities/ErrorUtility';
 import { AccountRepository } from '../repositories/account.repository';
@@ -198,13 +198,10 @@ export class UserService {
     // const hashedPassword = await hashPassword(oldPassword);
     // Validate old password in db
     // const isValid = await this.userRepository.findAll({ userId, hashedPassword });
-
     // if (!isValid) {
     //   throw new UnauthorizedError('Invalid old password');
     // }
-
     // await this.updatePassword(userId, newPassword);
-    console.log(_userId, _oldPassword, _newPassword);
   }
 
   async updatePassword(userId: string, _newPassword: string): Promise<void> {

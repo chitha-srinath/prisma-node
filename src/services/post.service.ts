@@ -1,5 +1,5 @@
 import { Post } from '@prisma/client';
-import { PostRepository } from '../repositories/post.repostiory';
+import { PostRepository } from '../repositories/post.repository';
 import { CreatePostData, UpdatePostData } from '@/Dtos/post.dto';
 import { NotFoundError } from '../Utilities/ErrorUtility';
 

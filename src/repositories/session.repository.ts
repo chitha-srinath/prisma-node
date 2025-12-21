@@ -1,5 +1,5 @@
-import { Session, PrismaClient, Prisma } from '@prisma/client';
-import { BaseRepository } from './baserepostiory';
+import { Session, PrismaClient, Prisma, User } from '@prisma/client';
+import { BaseRepository } from './base.repository';
 
 /**
  * Repository for Session entity operations.
@@ -36,7 +36,7 @@ export class SessionRepository extends BaseRepository<
    * @param token Session token
    * @returns Session with user data or null
    */
-  async findByTokenWithUser(token: string): Promise<(Session & { user: any }) | null> {
+  async findByTokenWithUser(token: string): Promise<(Session & { user: User }) | null> {
     return this.getModel().findUnique({
       where: { token },
       include: { user: true },

@@ -1,5 +1,5 @@
 import { User, PrismaClient, Prisma, Session } from '@prisma/client';
-import { BaseRepository } from './baserepostiory';
+import { BaseRepository } from './base.repository';
 /**
  * Repository for User entity operations.
  * Extends BaseRepository to provide type-safe database operations for User model.

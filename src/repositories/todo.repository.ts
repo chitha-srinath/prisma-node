@@ -1,5 +1,5 @@
 import { Todo, PrismaClient, Prisma } from '@prisma/client';
-import { BaseRepository } from './baserepostiory';
+import { BaseRepository } from './base.repository';
 
 /**
  * Repository for Todo entity operations.

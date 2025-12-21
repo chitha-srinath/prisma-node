@@ -1,5 +1,5 @@
 import { Account, PrismaClient, Prisma } from '@prisma/client';
-import { BaseRepository } from './baserepostiory';
+import { BaseRepository } from './base.repository';
 import { randomUUID } from 'node:crypto';
 
 /**
