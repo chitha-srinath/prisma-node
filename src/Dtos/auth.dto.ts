@@ -1,4 +1,4 @@
-import { z, object, string } from 'zod';
+import { z, object, string, email } from 'zod/v4';
 
 /**
  * Zod schema for user login validation.
@@ -16,8 +16,8 @@ export const LoginDto = object({
  * Validates email format, password length requirements, and name.
  */
 export const RegisterDto = object({
-  name: string().min(1, { message: 'Name is required' }),
-  email: string().email({ message: 'Enter valid email' }),
+  username: string().min(1, { message: 'Name is required' }),
+  email: email({ message: 'Enter valid email' }),
   password: string()
     .min(6, { message: 'Password length should be minimum of 6 characters' })
     .max(64, { message: 'Password length should be maximum of 64 characters' }),

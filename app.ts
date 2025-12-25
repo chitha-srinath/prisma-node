@@ -65,7 +65,7 @@ export class App {
   private initializeRoutes(): void {
     // this.app.all('/api/auth/*authPath', toNodeHandler(auth));
     this.app.use(express.json());
-    this.app.get('/health', (req: Request, res: Response) => {
+    this.app.get('/api/health', (req: Request, res: Response) => {
       res.status(200).json({ status: 'healthy' });
     });
     this.app.use('/api', indexRoutes);

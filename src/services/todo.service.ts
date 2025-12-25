@@ -48,7 +48,7 @@ export class TodoService {
       skip: number;
     };
   }> {
-    const { userId, limit = 20 } = data;
+    const { userId, limit = 20, search } = data;
     let page = 1;
 
     if ('page' in data) {
@@ -58,7 +58,7 @@ export class TodoService {
     const skip = (page - 1) * limit;
 
     const todos = await this.todoRepository.findAll(
-      { userId: userId },
+      { userId: userId, ...(search && { title: { contains: search, mode: 'insensitive' } }) },
       undefined,
       undefined,
       undefined,
